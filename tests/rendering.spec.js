@@ -92,6 +92,28 @@ test('scrolling to the end reaches inquiry and footer intact', async ({ page }) 
   await expect(page.locator('footer .made')).toContainText('human intent, machine leverage');
 });
 
+test('strata are watermarks, never content — styled, faint, out of flow', async ({ page }) => {
+  await gotoSettled(page);
+  const report = await page.evaluate(() => {
+    return [...document.querySelectorAll('.strata')].map(s => {
+      const cs = getComputedStyle(s);
+      const glyph = s.querySelector('.s-glyph');
+      let alpha = 1;
+      if (glyph) {
+        const m = getComputedStyle(glyph).color.match(/rgba?\([^)]*?([\d.]+)\)$/);
+        alpha = m ? parseFloat(m[1]) : 1;
+      }
+      return { pos: cs.position, z: cs.zIndex, alpha };
+    });
+  });
+  expect(report.length).toBe(4);
+  for (const r of report) {
+    expect(r.pos, 'strata missing its CSS — HTML/CSS version skew?').toBe('absolute');
+    expect(r.z).toBe('-1');
+    expect(r.alpha, 'glyph must be watermark-faint').toBeLessThan(0.12);
+  }
+});
+
 test('principles heading is never overlapped by its parallaxing cards', async ({ page }) => {
   await gotoSettled(page);
   await page.locator('#principles h2.sec').scrollIntoViewIfNeeded();

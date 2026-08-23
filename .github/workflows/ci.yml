@@ -54,3 +54,22 @@ jobs:
           path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Post-deploy smoke — the live domain must serve THIS build
+        run: |
+          set -e
+          URL="https://aletheiainstitute.ai"
+          REF=$(grep -o 'css/main.css?v=[a-f0-9]*' dist/index.html | head -1)
+          echo "expecting: $REF"
+          LIVE=""
+          for i in $(seq 1 18); do
+            LIVE=$(curl -s "$URL/" | grep -o 'css/main.css?v=[a-f0-9]*' | head -1 || true)
+            [ "$LIVE" = "$REF" ] && break
+            echo "poll $i: served '$LIVE' — waiting for CDN…"; sleep 10
+          done
+          [ "$LIVE" = "$REF" ] || { echo "FAIL: live HTML never matched this build"; exit 1; }
+          for a in $(grep -oE '(css|js|assets)/[^"?]+\?v=[a-f0-9]+' dist/index.html | sort -u); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$URL/$a")
+            echo "$code  $a"
+            [ "$code" = "200" ] || { echo "FAIL: hashed asset not serving"; exit 1; }
+          done
+          echo "SMOKE PASS: live HTML and all hashed assets are this build, atomically."

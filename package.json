@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "type": "module",
   "private": true,
-  "description": "The Aletheia Institute — aletheiainstitute.ai. Static, self-hosted, zero external requests. This package exists only for the test suite and automation; the site itself has no runtime dependencies.",
+  "description": "The Aletheia Institute \u2014 aletheiainstitute.ai. Static, self-hosted, zero external requests. This package exists only for the test suite and automation; the site itself has no runtime dependencies.",
   "scripts": {
     "serve": "python3 -m http.server 8123",
     "test": "playwright test",
@@ -12,7 +12,8 @@
     "vendor": "node scripts/vendor.mjs",
     "vendor:fonts": "node scripts/vendor.mjs --fonts",
     "vendor:check": "node scripts/check-vendor-updates.mjs",
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "test:live": "LIVE=1 playwright test tests/live.spec.js --project=desktop"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.9.1",
