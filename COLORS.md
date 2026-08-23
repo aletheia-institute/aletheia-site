@@ -14,8 +14,8 @@ by wisdom*. The seal (a sunburst over an open book, gold on azure) and the site 
 (light revealing content from darkness) say the same sentence.
 
 Market position: navy is the most-trusted color in healthcare and finance — the right
-register for clinical software. And in AI, the premium territory is empty: Anthropic
-is cream, OpenAI grey-blue, Vercel monochrome, Linear indigo. Nobody in AI owns navy
+register for clinical software. And in AI, the premium territory is empty: the major labs
+ship cream, grey-blue, monochrome, and indigo. Nobody in AI owns navy
 and gold. In academia it is common; in AI it is whitespace.
 
 ## Revision II — azure becomes light

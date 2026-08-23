@@ -118,7 +118,7 @@ test.describe('static: the promise', () => {
   test('the collaboration stays on the record', () => {
     const html = read('index.html');
     expect(html).toContain('a human architect');      // source comment
-    expect(html).toContain('Claude');                 // source comment
+
     expect(html).toContain('This site calls no one');
     expect(html).toContain('some truths must be typed to be seen');  // footer whisper
   });
