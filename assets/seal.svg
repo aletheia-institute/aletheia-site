@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+<circle cx="300" cy="300" r="292" fill="#0E263D"/>
+<circle cx="300" cy="300" r="290" fill="none" stroke="#E7C878" stroke-width="2"/>
+<circle cx="300" cy="300" r="278" fill="none" stroke="#E7C878" stroke-width="6"/>
+<circle cx="300" cy="300" r="205" fill="none" stroke="#E7C878" stroke-width="2.5"/>
+<circle cx="300" cy="300" r="199" fill="none" stroke="#E7C878" stroke-width="1"/>
+<defs>
+<path id="top" d="M 60.00,300.00 A 240,240 0 0 1 540.00,300.00"/>
+<path id="bot" d="M 62.00,300.00 A 238,238 0 0 0 538.00,300.00"/>
+</defs>
+<text font-family="Georgia,&quot;Times New Roman&quot;,serif" font-size="41" letter-spacing="6" fill="#F3D89A" font-weight="bold"><textPath href="#top" startOffset="50%" text-anchor="middle">THE ALETHEIA INSTITUTE</textPath></text>
+<text font-family="Georgia,&quot;Times New Roman&quot;,serif" font-size="30" letter-spacing="7" fill="#F3D89A"><textPath href="#bot" startOffset="50%" text-anchor="middle">VERITAS  EX  DATIS</textPath></text>
+<g transform="translate(78,300) rotate(45)"><rect x="-7" y="-7" width="14" height="14" fill="#E7C878"/><rect x="-3.5" y="-3.5" width="7" height="7" fill="#0E263D"/></g>
+<g transform="translate(522,300) rotate(45)"><rect x="-7" y="-7" width="14" height="14" fill="#E7C878"/><rect x="-3.5" y="-3.5" width="7" height="7" fill="#0E263D"/></g>
+<path d="M 285.36,467.36 L 248.09,459.78 L 213.47,444.00 L 183.30,420.85 L 159.10,391.50 L 142.13,357.46 L 133.25,320.47 L 132.92,282.44 L 141.15,245.30 L 157.53,210.97 L 181.21,181.21 L 210.97,157.53" fill="none" stroke="#E7C878" stroke-width="2.4"/>
+<g transform="translate(252.10,447.41) rotate(0.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(206.78,455.15) rotate(49.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(192.33,411.50) rotate(26.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(148.20,398.58) rotate(75.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(154.35,353.01) rotate(52.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(120.35,322.06) rotate(101.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(145.85,283.80) rotate(78.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(128.86,241.07) rotate(127.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(168.55,217.86) rotate(104.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(172.01,172.01) rotate(153.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(217.86,168.55) rotate(130.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<path d="M 314.64,467.36 L 351.91,459.78 L 386.53,444.00 L 416.70,420.85 L 440.90,391.50 L 457.87,357.46 L 466.75,320.47 L 467.08,282.44 L 458.85,245.30 L 442.47,210.97 L 418.79,181.21 L 389.03,157.53" fill="none" stroke="#E7C878" stroke-width="2.4"/>
+<g transform="translate(347.90,447.41) rotate(144.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(393.22,455.15) rotate(167.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(407.67,411.50) rotate(118.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(451.80,398.58) rotate(141.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(445.65,353.01) rotate(92.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(479.65,322.06) rotate(115.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(454.15,283.80) rotate(66.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(471.14,241.07) rotate(89.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(431.45,217.86) rotate(40.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(427.99,172.01) rotate(63.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g transform="translate(382.14,168.55) rotate(14.0)"><ellipse cx="0" cy="0" rx="15" ry="6.2" fill="#E7C878"/></g>
+<g><path d="M 232,432 L 368,432 L 358,452 L 368,472 L 232,472 L 242,452 Z" fill="#0E263D" stroke="#E7C878" stroke-width="2"/><text x="300" y="459" font-family="Georgia,serif" font-size="24" letter-spacing="3" fill="#F3D89A" text-anchor="middle">ΑΛΗΘΕΙΑ</text></g>
+<line x1="262.4" y1="286.3" x2="209.8" y2="267.2" stroke="#E7C878" stroke-width="3.4"/>
+<line x1="266.0" y1="279.0" x2="218.3" y2="249.6" stroke="#E7C878" stroke-width="1.6"/>
+<line x1="270.9" y1="272.6" x2="230.2" y2="234.1" stroke="#E7C878" stroke-width="3.4"/>
+<line x1="277.1" y1="267.2" x2="244.9" y2="221.4" stroke="#E7C878" stroke-width="1.6"/>
+<line x1="284.2" y1="263.3" x2="262.0" y2="211.9" stroke="#E7C878" stroke-width="3.4"/>
+<line x1="291.9" y1="260.8" x2="280.6" y2="206.0" stroke="#E7C878" stroke-width="1.6"/>
+<line x1="300.0" y1="260.0" x2="300.0" y2="204.0" stroke="#E7C878" stroke-width="3.4"/>
+<line x1="308.1" y1="260.8" x2="319.4" y2="206.0" stroke="#E7C878" stroke-width="1.6"/>
+<line x1="315.8" y1="263.3" x2="338.0" y2="211.9" stroke="#E7C878" stroke-width="3.4"/>
+<line x1="322.9" y1="267.2" x2="355.1" y2="221.4" stroke="#E7C878" stroke-width="1.6"/>
+<line x1="329.1" y1="272.6" x2="369.8" y2="234.1" stroke="#E7C878" stroke-width="3.4"/>
+<line x1="334.0" y1="279.0" x2="381.7" y2="249.6" stroke="#E7C878" stroke-width="1.6"/>
+<line x1="337.6" y1="286.3" x2="390.2" y2="267.2" stroke="#E7C878" stroke-width="3.4"/>
+<path d="M 268,300 A 32,32 0 0 1 332,300 Z" fill="#E7C878"/>
+<path d="M 268,300 A 32,32 0 0 1 332,300 Z" fill="none" stroke="#E7C878" stroke-width="1"/>
+<g stroke="#E7C878" stroke-width="2.4" fill="#0E263D" stroke-linejoin="round"><path d="M 300,318 C 276,306 246,306 224,314 L 224,362 C 246,354 276,354 300,366 Z"/><path d="M 300,318 C 324,306 354,306 376,314 L 376,362 C 354,354 324,354 300,366 Z"/></g>
+<line x1="300" y1="318" x2="300" y2="366" stroke="#E7C878" stroke-width="2.4"/>
+<line x1="238" y1="326" x2="288" y2="329" stroke="#E7C878" stroke-width="1.3"/>
+<line x1="312" y1="329" x2="362" y2="326" stroke="#E7C878" stroke-width="1.3"/>
+<line x1="238" y1="336" x2="288" y2="339" stroke="#E7C878" stroke-width="1.3"/>
+<line x1="312" y1="339" x2="362" y2="336" stroke="#E7C878" stroke-width="1.3"/>
+<line x1="238" y1="346" x2="288" y2="349" stroke="#E7C878" stroke-width="1.3"/>
+<line x1="312" y1="349" x2="362" y2="346" stroke="#E7C878" stroke-width="1.3"/>
+</svg>
