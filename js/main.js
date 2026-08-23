@@ -227,30 +227,42 @@
     });
   }
 
-  /* ---------- Kickers: Greek resolves into English (unconcealment, literal) ---------- */
-  if (!reduced) {
+  /* ---------- Kickers: Greek resolves into English (unconcealment, literal) ----------
+     Reliable: fires on every downward entry, delayed past the fade-in so it is
+     actually SEEN. Clickable: any kicker replays its own unconcealment. */
+  {
     const POOL = 'ΑΛΗΘΕΙΦΣΔΠΩΞΨΓΡΤ';
+    function descramble(k) {
+      if (reduced || k.dataset.animating === '1') return;
+      const original = k.dataset.original;
+      k.dataset.animating = '1';
+      const chars = original.split('');
+      const resolveAt = chars.map((c, i) => 300 + i * 50);
+      const t0 = performance.now();
+      const iv = setInterval(() => {
+        const el = performance.now() - t0;
+        let done = true;
+        k.textContent = chars.map((c, i) => {
+          if (c === ' ' || el >= resolveAt[i]) return c;
+          done = false;
+          return POOL[(Math.random() * POOL.length) | 0];
+        }).join('');
+        if (done) { clearInterval(iv); k.dataset.animating = '0'; }
+      }, 40);
+    }
     document.querySelectorAll('.kicker').forEach((k) => {
-      const original = k.childNodes.length ? k.textContent : '';
+      const original = k.textContent;
       if (!original.trim()) return;
-      ScrollTrigger.create({
-        trigger: k, start: 'top 88%', once: true,
-        onEnter: () => {
-          const chars = original.split('');
-          const resolveAt = chars.map((c, i) => 220 + i * 42);
-          const t0 = performance.now();
-          const iv = setInterval(() => {
-            const el = performance.now() - t0;
-            let done = true;
-            k.textContent = chars.map((c, i) => {
-              if (c === ' ' || el >= resolveAt[i]) return c;
-              done = false;
-              return POOL[(Math.random() * POOL.length) | 0];
-            }).join('');
-            if (done) clearInterval(iv);
-          }, 38);
-        }
-      });
+      k.dataset.original = original;
+      k.classList.add('replayable');
+      k.setAttribute('title', 'Unconceal again');
+      k.addEventListener('click', () => descramble(k));
+      if (!reduced) {
+        ScrollTrigger.create({
+          trigger: k, start: 'top 85%',
+          onEnter: () => setTimeout(() => descramble(k), 350)
+        });
+      }
     });
   }
 
@@ -313,7 +325,7 @@
   if (termBody) {
     const EXCHANGES = [
       {
-        q: 'Which of my GI patients are overdue for follow-up colonoscopy?',
+        q: 'Which of my patients are overdue for follow-up colonoscopy?',
         a: 'Reviewing your practice records… 14 patients have surveillance intervals that\nlapsed more than 90 days ago. Highest priority:\n\n  • 3 patients with prior adenomatous polyps  (interval: 3 yr — overdue 4–7 mo)\n  • 2 patients with family history of CRC     (interval: 5 yr — overdue 3 mo)\n  • 9 average-risk patients                   (interval: 10 yr)\n\nDraft recall letters are ready for front-desk review.',
         cite: '[sources: your scheduling DB · procedure notes 2016–2026 · your surveillance protocol v3]'
       },
@@ -321,6 +333,21 @@
         q: 'What did my no-show rate cost the practice last quarter?',
         a: 'Q2 no-show rate was 11.4% (218 slots). At your blended reimbursement of\n$412/visit, that is ≈ $89,800 in unrecovered capacity.\n\nPattern detected: Monday 8–10 AM slots account for 31% of no-shows.\nSuggestion: overbook that window at 1.2× or shift to telehealth confirms.',
         cite: '[sources: your PM system · remittance data · appointment logs]'
+      },
+      {
+        q: 'Which referrals we sent out never got scheduled?',
+        a: 'Cross-checking outbound referrals against returned reports… 23 referrals from\nthe last 120 days have no completed-visit record:\n\n  • 9 imaging      (6 past their clinical urgency window)\n  • 8 specialist   (4 to the same practice — worth a phone call)\n  • 6 lab work-ups\n\nA follow-up worklist is queued for your care coordinator, oldest first.',
+        cite: '[sources: your referral log · inbound faxes/documents · care-coordination notes]'
+      },
+      {
+        q: 'Which prior authorizations expire in the next two weeks?',
+        a: '7 active prior auths lapse within 14 days. 3 belong to patients already\nscheduled AFTER the expiry date:\n\n  • 2 infusion therapies   (renewal takes ~10 business days — start today)\n  • 1 imaging series       (patient scheduled day 16 — move up or renew)\n\nRenewal packets are pre-filled from the original submissions for your review.',
+        cite: '[sources: payer portals ledger · your scheduling DB · auth history]'
+      },
+      {
+        q: 'Are we staffed for what next week actually looks like?',
+        a: 'Forecast from 3 years of your visit patterns: Tuesday will run ≈ 118% of\ncapacity between 9–11 AM (flu season + 2 providers double-booked), while\nThursday afternoon sits at 61%.\n\nSuggestion: shift one MA from Thursday PM to Tuesday AM, and open 4\nTuesday telehealth slots to absorb the overflow.',
+        cite: '[sources: appointment history 2023–2026 · staff schedule · seasonal visit trends]'
       }
     ];
     let idx = 0, playing = false, played = false, skipNow = false;
@@ -359,14 +386,14 @@
     }
 
     function playExchange(n) {
-      if (playing || n >= EXCHANGES.length) return;
+      if (playing) return;
       playing = true; idx = n;
       const ex = EXCHANGES[n];
       termNext.classList.remove('show');
       if (reduced) {
         renderInstant(ex);
         playing = false;
-        if (n + 1 < EXCHANGES.length) termNext.classList.add('show');
+        termNext.classList.add('show');   // the demonstration loops forever
         return;
       }
       const qEl = document.createElement('div'); qEl.className = 'q';
@@ -382,7 +409,7 @@
           gsap.to(cEl, { opacity: 1, duration: 0.6 });
           announce(ex);
           playing = false;
-          if (n + 1 < EXCHANGES.length) termNext.classList.add('show');
+          termNext.classList.add('show');   // the demonstration loops forever
         }), 420);
       });
     }
@@ -395,9 +422,11 @@
     }, { threshold: 0.4 }).observe(termBody);
 
     termNext.addEventListener('click', () => {
-      if (playing || idx + 1 >= EXCHANGES.length) return;
-      termBody.appendChild(document.createElement('br'));
-      playExchange(idx + 1);
+      if (playing) return;
+      const next = (idx + 1) % EXCHANGES.length;
+      if (next === 0) termBody.replaceChildren();      // wrap: a clean slate
+      else termBody.appendChild(document.createElement('br'));
+      playExchange(next);
     });
   }
 
