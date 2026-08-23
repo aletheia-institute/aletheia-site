@@ -18,17 +18,29 @@ register for clinical software. And in AI, the premium territory is empty: Anthr
 is cream, OpenAI grey-blue, Vercel monochrome, Linear indigo. Nobody in AI owns navy
 and gold. In academia it is common; in AI it is whitespace.
 
+## Revision II — azure becomes light
+
+Leadership review judged the first cut right at the hero and too heavy below it:
+full-strength navy gradients across every section read glossy-SaaS, and the gold
+lost its punch against saturated blue. The correction is not to abandon azure but
+to **promote it from ground to light**: the page ground is now desaturated ink —
+the jeweler's cool black velvet under gold — and the brand's azure appears only
+as soft ambient glow behind interactive elements. Heraldically this is *stronger*:
+truth's color becomes the illumination itself. The seal and all identity artifacts
+keep Midnight as their field, unchanged.
+
 ## The tinctures
 
 | Name | Hex | Role | Law |
 |---|---|---|---|
-| **Aletheia Midnight** | `#0B1F33` | The field | The structural ground of everything |
-| **Midnight Ink** | `#050B14` | The field, deepest | Page ground; gradients descend into it |
+| **Aletheia Midnight** | `#0B1F33` | The brand azure | The seal's field. On the site: **light only** — low-opacity glows, never ground |
+| **Midnight Ink** | `#0A0E14` | The ground | Desaturated blue-black; never lifts into cobalt |
+| Slate Card | `#141A23` | Card fill | Off-black; elevation drawn by gold hairlines |
 | **Veritas Gold** | `#E7C878` | The metal | Always foil (gradient), never flat. **≤ 15% coverage** |
 | Gold Deep | `#B99549` | Foil mid-turn | Ramp interior only |
 | Gold High | `#F7E3B0` | Foil hotspot | The brightest value on any page |
 | **Ledger Bronze** | `#7A5E2A` | The metal's shadow | Anchors every foil ramp. Never text |
-| **Institute Ivory** | `#F6F3EA` | The text tincture | A tint of the gold hue. 15.04:1 on Midnight (AAA) |
+| **Institute Ivory** | `#F6F3EA` | The text tincture | A tint of the gold hue. AAA on every ground |
 | **Verity Teal** | `#3FBFAE` | Signal | Live states, citations, evidence. **≤ 2% of viewport.** Never decoration |
 
 The canonical foil ramp: `#7A5E2A → #B99549 → #E7C878 → #F7E3B0` — bronze shadow to
