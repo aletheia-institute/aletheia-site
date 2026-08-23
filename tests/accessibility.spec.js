@@ -30,7 +30,7 @@ test('focus-visible paints gold on keyboard focus', async ({ page, isMobile }) =
     const el = document.activeElement;
     return getComputedStyle(el).outlineColor;
   });
-  expect(outline).toBe('rgb(231, 200, 120)');  // Veritas Gold
+  expect(outline).toBe('rgb(122, 94, 42)');  // Ledger Bronze — gold's voice on paper
 });
 
 test('terminal presentation is hidden from AT; announcements are whole', async ({ page }) => {

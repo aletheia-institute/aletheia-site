@@ -153,26 +153,32 @@
     uniform float u_dpr;
     varying float v_alpha;
     varying float v_tint;
+    varying float v_seed;
     void main() {
       vec2 clip = (a_data.xy / u_res) * 2.0 - 1.0;
       gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
       gl_PointSize = a_data.z * u_dpr;
       v_alpha = a_data.w;
       v_tint = a_tint;
+      v_seed = fract(a_data.z * 3.7);   // stable per particle: size never changes
     }`;
   const fsrc = `
     precision mediump float;
     varying float v_alpha;
     varying float v_tint;
+    varying float v_seed;
     uniform float u_teal;
     void main() {
       vec2 d = gl_PointCoord - 0.5;
       float r = length(d);
       float glow = smoothstep(0.5, 0.0, r);
       glow *= glow;
-      vec3 gold = vec3(0.906, 0.784, 0.470);
-      vec3 teal = vec3(0.247, 0.749, 0.682);
-      vec3 col = mix(gold, teal, v_tint * u_teal);
+      // Daylight: ink and bronze motes on vellum (alpha-composited, not additive)
+      vec3 ink = vec3(0.043, 0.122, 0.200);
+      vec3 bronze = vec3(0.478, 0.369, 0.165);
+      vec3 teal = vec3(0.078, 0.396, 0.357);
+      vec3 base = mix(ink, bronze, step(0.55, v_seed));
+      vec3 col = mix(base, teal, v_tint * u_teal);
       gl_FragColor = vec4(col, glow * v_alpha * (1.0 + v_tint * u_teal * 0.6));
     }`;
 
@@ -208,7 +214,7 @@
     gl.enableVertexAttribArray(aTint);
     gl.vertexAttribPointer(aTint, 1, gl.FLOAT, false, STRIDE * 4, 16);
     gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);   // ink on paper, not light in dark
     gl.clearColor(0, 0, 0, 0);
     gl.viewport(0, 0, canvas.width, canvas.height);
     return true;
