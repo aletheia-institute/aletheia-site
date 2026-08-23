@@ -32,7 +32,7 @@ jobs:
         run: node scripts/vendor.mjs
       - name: Open update PR (gated by CI)
         if: steps.check.outputs.updated == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: chore/vendor-update
           title: 'chore(vendor): update runtime libraries'
