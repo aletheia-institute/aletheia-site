@@ -296,6 +296,15 @@ nav.scrolled{background:rgba(7,10,15,.74);backdrop-filter:blur(14px);border-colo
 /* ---------- Section scaffolding ---------- */
 section{position:relative;padding:130px 0}
 .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+
+/* Azure as light: the brand navy pools softly behind the interactive
+   surfaces — the terminal, the tiers, the inquiry — and nowhere else. */
+.azure-pool{position:relative}
+.azure-pool::before{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  inset:6% 0 -10% 0;   /* never widen the layout — the ellipse bleeds, the box doesn't */
+  background:radial-gradient(82% 62% at 50% 58%, rgba(20,42,66,.34), transparent 72%);
+}
 .kicker{
   font-family:var(--serif);letter-spacing:4px;font-size:12px;color:var(--gold);
   text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:14px;
