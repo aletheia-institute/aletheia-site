@@ -6,8 +6,8 @@ requests** — every font, library, and asset is vendored into this repository. 
 footer's promise ("This site calls no one. Neither will your data.") is not copy;
 it is a test that fails the build if it ever stops being true.
 
-Directed by a human architect. Engineered with an AI collaborator (Claude, Anthropic).
-The colophon on the page keeps that collaboration on the record.
+Directed by a human architect. Engineered with an AI collaborator.
+The footer keeps that collaboration on the record.
 
 ## Run it
 
