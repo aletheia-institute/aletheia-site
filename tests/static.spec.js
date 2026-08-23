@@ -115,21 +115,37 @@ test.describe('static: the promise', () => {
     expect(lenis).toContain(`"${manifest.libraries.lenis.version}"`);
   });
 
-  test('the colophon keeps the collaboration on the record', () => {
+  test('the collaboration stays on the record', () => {
     const html = read('index.html');
-    expect(html).toContain('A human architect');
-    expect(html).toContain('Claude');
+    expect(html).toContain('a human architect');      // source comment
+    expect(html).toContain('Claude');                 // source comment
     expect(html).toContain('This site calls no one');
+    expect(html).toContain('some truths must be typed to be seen');  // footer whisper
   });
 
   test('required structure: every section, both nav systems, the seal', () => {
     const html = read('index.html');
-    for (const id of ['hero', 'manifesto', 'services', 'method', 'demo', 'principles', 'contact', 'colophon',
-                      'palette', 'mobile-menu', 'vitals', 'term-body', 'term-live', 'constellation']) {
+    for (const id of ['hero', 'manifesto', 'services', 'method', 'demo', 'principles', 'contact',
+                      'inquiry', 'inq-body', 'palette', 'mobile-menu', 'vitals', 'term-body',
+                      'term-live', 'constellation']) {
       expect(html, `missing #${id}`).toContain(`id="${id}"`);
     }
     expect(html).toContain('assets/seal.svg');
     expect(html).toContain('lang="en"');
     expect(html).toMatch(/<meta name="description"/);
+  });
+
+  test('inquiry addresses inquiry@ and declares its honesty', () => {
+    const html = read('index.html');
+    expect(html).toContain('inquiry@aletheiainstitute.ai');
+    expect(html).toContain('Nothing is transmitted silently');
+    expect(read('js/inquiry.js')).toContain('inquiry@aletheiainstitute.ai');
+  });
+
+  test('demonstration: at least 4 exchanges, none of them GI-specific', () => {
+    const main = read('js/main.js');
+    const questions = main.match(/q: '/g) || [];
+    expect(questions.length).toBeGreaterThanOrEqual(4);
+    expect(main).not.toMatch(/\bGI\b/);
   });
 });

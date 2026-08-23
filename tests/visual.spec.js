@@ -34,9 +34,9 @@ test('tiers', async ({ page }, testInfo) => {
   await expect(page.locator('.tiers')).toHaveScreenshot('tiers.png');
 });
 
-test('colophon', async ({ page }, testInfo) => {
-  skipIfNoBaseline(testInfo, 'colophon.png');
+test('inquiry', async ({ page }, testInfo) => {
+  skipIfNoBaseline(testInfo, 'inquiry.png');
   await settle(page);
-  await page.locator('#colophon').scrollIntoViewIfNeeded();
-  await expect(page.locator('#colophon .ledger')).toHaveScreenshot('colophon.png');
+  await page.locator('#inquiry').scrollIntoViewIfNeeded();
+  await expect(page.locator('#inquiry')).toHaveScreenshot('inquiry.png');
 });

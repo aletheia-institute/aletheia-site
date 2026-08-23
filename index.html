@@ -217,45 +217,27 @@
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- INQUIRY -->
 <section id="contact">
   <div class="wrap">
-    <div class="kicker fade-up">Contact</div>
-    <h2 class="sec fade-up">Start the conversation.</h2>
-    <div class="contact-grid">
-      <div class="fade-up">
-        <p class="lead">Whether you are commissioning a platform, exploring private AI on your own data, or simply want a candid assessment of where your operation is bleeding time and revenue — write to us. A principal answers every inquiry.</p>
-        <p style="margin-top:30px"><a class="btn btn-gold" data-magnetic href="mailto:hello@aletheiainstitute.ai">hello@aletheiainstitute.ai</a></p>
-      </div>
-      <div class="fade-up">
-        <table class="mail-table">
-          <tr><td><a href="mailto:hello@aletheiainstitute.ai">hello@</a></td><td>New business &amp; general inquiries</td></tr>
-          <tr><td><a href="mailto:clients@aletheiainstitute.ai">clients@</a></td><td>Active client engagements</td></tr>
-          <tr><td><a href="mailto:support@aletheiainstitute.ai">support@</a></td><td>Platform &amp; service support</td></tr>
-          <tr><td><a href="mailto:security@aletheiainstitute.ai">security@</a></td><td>Security disclosures &amp; questions</td></tr>
-          <tr><td><a href="mailto:privacy@aletheiainstitute.ai">privacy@</a></td><td>Data privacy &amp; compliance</td></tr>
-          <tr><td><a href="mailto:billing@aletheiainstitute.ai">billing@</a></td><td>Invoices &amp; accounts</td></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="kicker fade-up">Inquiry</div>
+    <h2 class="sec fade-up">One question begins it.</h2>
+    <p class="lead fade-up">Tell us where your operation is bleeding time and revenue — or simply what you wish your data could tell you. A principal reads and answers every inquiry.</p>
 
-<!-- COLOPHON — the site unconceals its own making -->
-<section id="colophon">
-  <div class="wrap">
-    <div class="kicker fade-up">How This Was Made</div>
-    <h2 class="sec fade-up">A collaboration, on the record.</h2>
-    <div class="ledger fade-up">
-      <div class="row"><span class="k">DIRECTION</span><span class="v">A human architect</span><span class="src">[source: judgment]</span></div>
-      <div class="row"><span class="k">ENGINEERING</span><span class="v">An AI collaborator — Claude, by Anthropic</span><span class="src">[source: partnership]</span></div>
-      <div class="row"><span class="k">CONSTELLATION</span><span class="v">Raw WebGL, written for this page alone</span><span class="src">[source: js/particles.js]</span></div>
-      <div class="row"><span class="k">TYPE</span><span class="v">Fraunces &amp; Inter, self-hosted</span><span class="src">[source: assets/fonts]</span></div>
-      <div class="row"><span class="k">PALETTE</span><span class="v">Complementary — gold H43 against navy H210–216, verified to WCAG AAA</span><span class="src">[source: color theory]</span></div>
-      <div class="row"><span class="k">EXTERNAL REQUESTS</span><span class="v">None. This site calls no one.</span><span class="src">[source: measured live below]</span></div>
-      <div class="row"><span class="k">REVIEW</span><span class="v">Every animation, claim, and contrast ratio checked by a person</span><span class="src">[source: the method]</span></div>
-      <p class="whisper">Built the way we build for clients: human intent, machine leverage, nothing concealed. — αλήθεια, some truths must be typed to be seen.</p>
+    <div class="inquiry fade-up" id="inquiry">
+      <div class="term-bar">
+        <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        <span class="title">aletheia — inquiry — composed on your device</span>
+        <span class="badge">PRIVATE</span>
+      </div>
+      <div class="inq-body" id="inq-body">
+        <!-- steps rendered by js/inquiry.js -->
+        <noscript>
+          <p style="padding:26px 0">Write to us directly: <a href="mailto:inquiry@aletheiainstitute.ai">inquiry@aletheiainstitute.ai</a></p>
+        </noscript>
+      </div>
     </div>
+    <p class="inq-note fade-up">Your words never leave this page until you press send — the inquiry is composed in your own mail client, addressed to <a href="mailto:inquiry@aletheiainstitute.ai">inquiry@aletheiainstitute.ai</a>. Nothing is transmitted silently.</p>
   </div>
 </section>
 
@@ -265,6 +247,7 @@
   <img class="seal-slow" id="footer-seal" src="assets/seal.svg" alt="">
   <div class="fm">VERITAS EX DATIS</div>
   <p class="promise">This site calls no one. Neither will your data.</p>
+  <p class="made">Built the way we build for clients: human intent, machine leverage, nothing concealed. <span class="whisper-em">— αλήθεια, some truths must be typed to be seen.</span></p>
   <div id="vitals" aria-label="Live page vitals">
     <span>PAGE <b id="v-weight">—</b></span>
     <span>EXTERNAL REQUESTS <b id="v-ext">—</b> <span class="live">measured live</span></span>
@@ -280,6 +263,7 @@
 <script src="js/particles.js"></script>
 <script src="js/main.js"></script>
 <script src="js/palette.js"></script>
+<script src="js/inquiry.js"></script>
 <script>
 /* Failsafe, dependency-free: if anything above failed, never trap the reader behind the loader. */
 setTimeout(function () {

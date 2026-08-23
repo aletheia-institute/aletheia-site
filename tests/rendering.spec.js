@@ -83,10 +83,27 @@ test('no element forces horizontal overflow — the layout never exceeds the vie
     .toBeLessThanOrEqual(vw + 2);
 });
 
-test('scrolling to the end reaches colophon and footer intact', async ({ page }) => {
+test('scrolling to the end reaches inquiry and footer intact', async ({ page }) => {
   await gotoSettled(page);
-  await page.locator('#colophon').scrollIntoViewIfNeeded();
-  await expect(page.locator('#colophon .ledger .row')).toHaveCount(7);
+  await page.locator('#inquiry').scrollIntoViewIfNeeded();
+  await expect(page.locator('#inq-body input#inq-field')).toBeVisible();
   await page.locator('footer .fine').scrollIntoViewIfNeeded();
   await expect(page.locator('footer .promise')).toContainText('This site calls no one');
+  await expect(page.locator('footer .made')).toContainText('human intent, machine leverage');
+});
+
+test('hero descenders are never clipped by the reveal mask', async ({ page }) => {
+  await gotoSettled(page);
+  // wait for the entrance reveal to finish (clearProps removes the transform)
+  await page.waitForFunction(() => {
+    const s = document.querySelectorAll('.hero-title .line')[1].querySelector('span');
+    return getComputedStyle(s).transform === 'none';
+  }, null, { timeout: 8000 });
+  // the mask line must extend past the glyph box of its inner span
+  const ok = await page.evaluate(() => {
+    const line = document.querySelectorAll('.hero-title .line')[1];
+    const span = line.querySelector('span');
+    return line.getBoundingClientRect().bottom - span.getBoundingClientRect().bottom;
+  });
+  expect(ok).toBeGreaterThan(2);   // padding-bottom room for the y/g descenders
 });
