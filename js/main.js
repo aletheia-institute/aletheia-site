@@ -40,8 +40,10 @@
       const el = document.querySelector(href);
       if (!el) return;
       e.preventDefault();
-      if (lenis) lenis.scrollTo(el, { offset: -70, duration: 1.4 });
-      else el.scrollIntoView();
+      if (lenis) {
+        lenis.start();     // a stopped Lenis (mobile menu open) silently drops scrollTo
+        lenis.scrollTo(el, { offset: -70, duration: 1.4 });
+      } else el.scrollIntoView();
       try { history.pushState(null, '', href); } catch (err) {}
       el.setAttribute('tabindex', '-1');
       el.focus({ preventScroll: true });

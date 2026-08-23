@@ -1,0 +1,47 @@
+name: Vendor library updates
+
+# The site vendors every runtime library (zero external requests), so Dependabot
+# cannot see them. This workflow checks upstream weekly, re-vendors, and opens a
+# PR — which must pass the full regression suite before it can merge.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check upstream versions
+        id: check
+        run: |
+          OUT=$(node scripts/check-vendor-updates.mjs)
+          echo "$OUT"
+          echo "updated=$(echo "$OUT" | grep -o 'updated=true' | head -1 | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+      - name: Re-vendor at new versions
+        if: steps.check.outputs.updated == 'true'
+        run: node scripts/vendor.mjs
+      - name: Open update PR (gated by CI)
+        if: steps.check.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/vendor-update
+          title: 'chore(vendor): update runtime libraries'
+          commit-message: 'chore(vendor): update vendored runtime libraries'
+          body: |
+            Automated weekly vendor refresh. New upstream versions were pinned in
+            `vendor.json` and re-downloaded into the repo.
+
+            **Merge only if CI is green** — the full regression suite (behavior,
+            accessibility, reduced-motion, visual, zero-external-requests) runs
+            against these exact files.
+          labels: dependencies, automated

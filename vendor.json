@@ -1,0 +1,32 @@
+{
+  "description": "Vendored runtime libraries. The site makes zero external requests, so every library is committed to the repo. `npm run vendor` re-downloads exactly these versions; the weekly vendor-update workflow bumps versions here, re-vendors, and opens a PR that must pass the full test suite before merge.",
+  "libraries": {
+    "gsap": {
+      "version": "3.12.5",
+      "npm": "gsap",
+      "files": {
+        "js/gsap.min.js": "https://cdn.jsdelivr.net/npm/gsap@{version}/dist/gsap.min.js",
+        "js/ScrollTrigger.min.js": "https://cdn.jsdelivr.net/npm/gsap@{version}/dist/ScrollTrigger.min.js"
+      }
+    },
+    "lenis": {
+      "version": "1.1.14",
+      "npm": "lenis",
+      "files": {
+        "js/lenis.min.js": "https://cdn.jsdelivr.net/npm/lenis@{version}/dist/lenis.min.js"
+      }
+    }
+  },
+  "fonts": {
+    "description": "Fontsource-built woff2, pinned by file. Fonts change rarely; update manually.",
+    "files": {
+      "assets/fonts/fraunces-300.woff2": "https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-300-normal.woff2",
+      "assets/fonts/fraunces-400.woff2": "https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-400-normal.woff2",
+      "assets/fonts/fraunces-400-italic.woff2": "https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-400-italic.woff2",
+      "assets/fonts/fraunces-600.woff2": "https://cdn.jsdelivr.net/fontsource/fonts/fraunces@latest/latin-600-normal.woff2",
+      "assets/fonts/inter-400.woff2": "https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.woff2",
+      "assets/fonts/inter-500.woff2": "https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-500-normal.woff2",
+      "assets/fonts/inter-600.woff2": "https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.woff2"
+    }
+  }
+}

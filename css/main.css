@@ -15,20 +15,33 @@
 @font-face{font-family:'Inter';src:url('../assets/fonts/inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
 @font-face{font-family:'Inter';src:url('../assets/fonts/inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
 
-/* ---------- Tokens ---------- */
+/* ---------- Tokens ----------
+   THE LIVERY — the named tinctures of the Institute.
+   In heraldry, azure signifies truth; or (gold), wisdom.
+   Canonical values live in tokens.json; the test suite holds
+   this file to them. Change them there, or not at all. */
 :root{
-  --ink:#050B14;
-  --navy:#0B1F33;
+  /* named tinctures */
+  --aletheia-midnight:#0B1F33;   /* the field — azure: truth */
+  --midnight-ink:#050B14;        /* the field at its deepest */
+  --veritas-gold:#E7C878;        /* the metal — or: wisdom, always foil, never flat */
+  --ledger-bronze:#7A5E2A;       /* the metal's shadow turn */
+  --institute-ivory:#F6F3EA;     /* the text tincture — gold's own light */
+  --verity-teal:#3FBFAE;         /* signal only: live states, citations, evidence */
+
+  /* functional aliases */
+  --ink:var(--midnight-ink);
+  --navy:var(--aletheia-midnight);
   --navy-2:#132E4C;
   --card:#0F2740;              /* lifted from #0C2036 — elevation now perceptible */
   --line:rgba(231,200,120,.14);
   --hairline:rgba(231,200,120,.28);
-  --gold-shadow:#7A5E2A;       /* the bronze anchor — metal's dark turn */
+  --gold-shadow:var(--ledger-bronze);
   --gold-deep:#B99549;
-  --gold:#E7C878;
+  --gold:var(--veritas-gold);
   --gold-hi:#F7E3B0;
-  --teal:#3FBFAE;              /* re-cut below gold's luminance; live states only */
-  --ivory:#F6F3EA;
+  --teal:var(--verity-teal);
+  --ivory:var(--institute-ivory);
   --ivory-dim:rgba(246,243,234,.70);   /* raised from .62 — AAA on every surface */
   --serif:'Fraunces',Georgia,'Times New Roman',serif;
   --sans:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
@@ -188,7 +201,9 @@ nav.scrolled{background:rgba(5,11,20,.72);backdrop-filter:blur(14px);border-colo
 .nav-toggle{display:none}
 @media(max-width:820px){
   .nav-links{display:none}
+  .brand span{display:none}          /* the seal alone carries the brand on small screens */
   .nav-cmdk span.label{display:none}
+  .nav-inner{padding:12px 16px}
   .nav-toggle{
     display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;
     width:44px;height:44px;padding:10px;background:none;border:1px solid var(--line);border-radius:4px;
@@ -306,7 +321,11 @@ h2.sec{
   font-size:clamp(21px,3vw,34px);line-height:1.5;letter-spacing:.002em;
 }
 .manifesto-text .w{display:inline-block}
-.js .manifesto-text .w{opacity:.25}   /* skimmable even before the light passes */
+/* Resting words must still clear WCAG contrast on their own (axe-verified):
+   .5 × ivory keeps 4.5:1+ on the field, then the light doubles them to full.
+   Gold emphasis rests brighter (.68 → 5.5:1) — the truth previews itself. */
+.js .manifesto-text .w{opacity:.5}
+.js .manifesto-text .em .w{opacity:.68}
 .manifesto-text .em{color:var(--gold)}
 .manifesto-sig{
   margin-top:44px;font-family:var(--serif);font-size:13px;letter-spacing:3px;color:var(--gold);
@@ -483,8 +502,13 @@ h2.sec{
 .ledger .v{color:var(--ivory)}
 .ledger .src{color:var(--teal);font-size:11.5px;margin-left:auto;text-align:right;flex:none}
 .ledger .whisper{
-  margin-top:26px;color:rgba(246,243,234,.45);font-style:italic;
+  margin-top:26px;color:rgba(246,243,234,.55);font-style:italic;
   font-family:var(--serif);font-size:13px;letter-spacing:1px;
+}
+@media(max-width:640px){
+  .ledger .row{flex-wrap:wrap;gap:2px 14px}
+  .ledger .k{min-width:100%}
+  .ledger .src{margin-left:0;text-align:left;flex-basis:100%}
 }
 
 /* ---------- Footer + vitals ---------- */
