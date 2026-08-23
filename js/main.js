@@ -307,13 +307,32 @@
     document.querySelectorAll('.step').forEach(s => s.classList.add('lit'));
   }
 
-  /* ---------- Principles: depth parallax ---------- */
+  /* ---------- Principles: depth parallax (gentle — never over the heading) ---------- */
   if (!reduced) {
     document.querySelectorAll('#principles [data-depth]').forEach((el) => {
       const d = parseFloat(el.dataset.depth);
       gsap.to(el, {
-        y: () => -(d * 130), ease: 'none',
+        y: () => -(d * 70), ease: 'none',
         scrollTrigger: { trigger: '#principles', start: 'top bottom', end: 'bottom top', scrub: 0.6 }
+      });
+    });
+  }
+
+  /* ---------- Inter-section parallax: each section drifts against the page,
+     and the azure pools lag behind their sections — depth at every boundary ---------- */
+  if (!reduced) {
+    ['#services', '#method', '#demo', '#contact'].forEach((sel) => {
+      const wrap = document.querySelector(sel + ' .wrap');
+      if (!wrap) return;
+      gsap.fromTo(wrap, { y: 34 }, {
+        y: -34, ease: 'none',
+        scrollTrigger: { trigger: sel, start: 'top bottom', end: 'bottom top', scrub: 0.5 }
+      });
+    });
+    document.querySelectorAll('.azure-pool').forEach((sec) => {
+      gsap.fromTo(sec, { '--pooly': '60px' }, {
+        '--pooly': '-60px', ease: 'none',
+        scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 0.8 }
       });
     });
   }

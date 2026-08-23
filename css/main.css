@@ -248,7 +248,7 @@ nav.scrolled{background:rgba(7,10,15,.74);backdrop-filter:blur(14px);border-colo
 }
 /* the reveal mask must not amputate descenders: pad the mask past the
    baseline, pull the next line back up by the same amount */
-.hero-title .line{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.1em}
+.hero-title .line{display:block;overflow:hidden;padding-bottom:.25em;margin-bottom:-.17em}
 .hero-title .line>span{display:inline-block}
 /* Gold foil — 4-stop ramp; the bronze base gives the metal its shadow turn */
 .foil{
@@ -260,7 +260,7 @@ nav.scrolled{background:rgba(7,10,15,.74);backdrop-filter:blur(14px);border-colo
 }
 @keyframes sheen{0%,100%{background-position:0% 0}50%{background-position:100% 0}}
 .hero-sub{
-  margin:46px auto 0;max-width:620px;color:var(--dim);
+  margin:64px auto 0;max-width:620px;color:var(--dim);
   font-size:clamp(15px,1.6vw,18px);font-weight:400;
 }
 .hero-motto{
@@ -269,6 +269,7 @@ nav.scrolled{background:rgba(7,10,15,.74);backdrop-filter:blur(14px);border-colo
 .hero-motto em{font-style:italic;letter-spacing:1px;color:var(--dim);margin-left:12px;text-transform:none}
 .hero-cta{margin-top:44px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
 .scroll-hint{
+  font-family:var(--serif);
   position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;
   display:flex;flex-direction:column;align-items:center;gap:10px;
   color:var(--dim);font-size:10.5px;letter-spacing:3.5px;
@@ -304,7 +305,10 @@ section{position:relative;padding:130px 0}
   content:"";position:absolute;z-index:-1;pointer-events:none;
   inset:6% 0 -10% 0;   /* never widen the layout — the ellipse bleeds, the box doesn't */
   background:radial-gradient(82% 62% at 50% 58%, rgba(20,42,66,.34), transparent 72%);
+  transform:translateY(var(--pooly,0px));   /* parallax: the light lags the page */
 }
+/* section headings ride above anything parallaxing beneath them */
+section .kicker,section h2.sec{position:relative;z-index:2}
 .kicker{
   font-family:var(--serif);letter-spacing:4px;font-size:12px;color:var(--gold);
   text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:14px;
@@ -478,7 +482,7 @@ h2.sec{
 }
 .principles-grid{
   position:relative;z-index:1;
-  display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:70px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:96px;
 }
 @media(max-width:860px){.principles-grid{grid-template-columns:1fr}}
 .pr{

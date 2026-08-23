@@ -92,6 +92,18 @@ test('scrolling to the end reaches inquiry and footer intact', async ({ page }) 
   await expect(page.locator('footer .made')).toContainText('human intent, machine leverage');
 });
 
+test('principles heading is never overlapped by its parallaxing cards', async ({ page }) => {
+  await gotoSettled(page);
+  await page.locator('#principles h2.sec').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(900);   // let the scrub settle at this position
+  const gap = await page.evaluate(() => {
+    const h = document.querySelector('#principles h2.sec').getBoundingClientRect();
+    const card = document.querySelector('#principles .pr').getBoundingClientRect();
+    return card.top - h.bottom;
+  });
+  expect(gap).toBeGreaterThan(4);   // the p's descender must breathe
+});
+
 test('hero descenders are never clipped by the reveal mask', async ({ page }) => {
   await gotoSettled(page);
   // wait for the entrance reveal to finish (clearProps removes the transform)
@@ -105,5 +117,5 @@ test('hero descenders are never clipped by the reveal mask', async ({ page }) =>
     const span = line.querySelector('span');
     return line.getBoundingClientRect().bottom - span.getBoundingClientRect().bottom;
   });
-  expect(ok).toBeGreaterThan(2);   // padding-bottom room for the y/g descenders
+  expect(ok).toBeGreaterThan(8);   // generous padding room for Fraunces descenders
 });
