@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!--
+  ════════════════════════════════════════════════════════════════
+  THE ALETHEIA INSTITUTE — aletheiainstitute.ai
+  ────────────────────────────────────────────────────────────────
+  Directed by a human architect.
+  Engineered with an AI collaborator (Claude, Anthropic).
+  Typeset in self-hosted Fraunces & Inter. Zero external requests.
+  Every animation reviewed by a person. Every claim grounded.
+
+  αλήθεια — some truths must be typed to be seen.
+  ════════════════════════════════════════════════════════════════
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -6,12 +18,20 @@
 <title>The Aletheia Institute — Veritas ex Datis</title>
 <meta name="description" content="The Aletheia Institute builds private, self-hosted AI operating platforms on your own data. Truth, from data — without your data ever leaving your firewall.">
 <link rel="icon" type="image/svg+xml" href="assets/seal.svg">
+<script>document.documentElement.className += ' js';</script>
+<link rel="preload" href="assets/fonts/fraunces-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/fraunces-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <!-- Loader: the seal draws itself -->
 <div id="loader" aria-hidden="true">
+  <div class="shutter top"></div>
+  <div class="shutter bottom"></div>
   <svg class="mark" viewBox="0 0 200 200">
     <circle class="ring r1" cx="100" cy="100" r="92" stroke-width="1.4"/>
     <circle class="ring r2" cx="100" cy="100" r="80" stroke-width="2.2"/>
@@ -22,12 +42,10 @@
     <path class="book br" d="M 100,112 C 112,106 126,106 136,110 L 136,132 C 126,128 112,128 100,134 Z" stroke-width="1.6"/>
   </svg>
   <div class="word">ΑΛΗΘΕΙΑ</div>
-  <div class="shutter top"></div>
-  <div class="shutter bottom"></div>
 </div>
 
 <div class="atmosphere" aria-hidden="true">
-  <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div>
+  <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div><div class="aurora a4"></div>
 </div>
 <div class="grain" aria-hidden="true"></div>
 <div id="progress" aria-hidden="true"></div>
@@ -43,12 +61,44 @@
       <a href="#demo">Demonstration</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="nav-cmdk" id="cmdk-btn" type="button" aria-haspopup="dialog">
+      <span class="label">Ask this page</span> <kbd>⌘K</kbd>
+    </button>
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div id="mobile-menu" aria-hidden="true">
+  <a href="#manifesto">Approach</a>
+  <a href="#services">Services</a>
+  <a href="#method">Method</a>
+  <a href="#demo">Demonstration</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- Ask-this-page palette -->
+<div id="palette" role="dialog" aria-modal="true" aria-label="Ask this page">
+  <div class="palette-box">
+    <input id="palette-input" type="text" placeholder="Ask this page anything…" autocomplete="off" spellcheck="false">
+    <div id="palette-results"></div>
+    <div class="palette-hint">↑↓ SELECT&nbsp;&nbsp;·&nbsp;&nbsp;⏎ REVEAL&nbsp;&nbsp;·&nbsp;&nbsp;ESC CLOSE&nbsp;&nbsp;·&nbsp;&nbsp;RETRIEVAL RUNS ON THIS PAGE'S OWN TEXT — NOTHING LEAVES</div>
+  </div>
+</div>
+
+<main id="main">
 
 <!-- HERO -->
 <header id="hero">
   <canvas id="constellation" aria-hidden="true"></canvas>
+  <svg class="hero-seal-static" viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="100" cy="100" r="92" stroke-width="1.4"/>
+    <circle cx="100" cy="100" r="80" stroke-width="2.2"/>
+    <circle cx="100" cy="100" r="58" stroke-width="1"/>
+    <path d="M 84,104 A 16,16 0 0 1 116,104" stroke-width="2"/>
+    <path d="M 100,112 C 88,106 74,106 64,110 L 64,132 C 74,128 88,128 100,134 Z" stroke-width="1.6"/>
+    <path d="M 100,112 C 112,106 126,106 136,110 L 136,132 C 126,128 112,128 100,134 Z" stroke-width="1.6"/>
+  </svg>
   <div class="hero-content">
     <div class="hero-kicker" data-hero-fade>THE ALETHEIA INSTITUTE</div>
     <h1 class="hero-title">
@@ -62,16 +112,17 @@
       <a class="btn btn-ghost" data-magnetic href="#demo">See It Speak</a>
     </div>
   </div>
-  <div class="scroll-hint" data-hero-fade><span>UNCONCEAL</span><span class="stem"></span></div>
+  <div class="scroll-hint" data-hero-fade aria-hidden="true"><span>UNCONCEAL</span><span class="stem"></span></div>
 </header>
 
 <!-- MANIFESTO — the unconcealment -->
-<section id="manifesto" aria-label="Our approach">
+<section id="manifesto">
+  <h2 class="sr-only">Our approach</h2>
   <div class="manifesto-pin">
-    <div class="beam" aria-hidden="true"></div>
+    <div class="beam" aria-hidden="true"><div class="beam-spot"></div></div>
     <div class="manifesto-body">
       <div class="kicker">From Our Leadership</div>
-      <p class="manifesto-text" id="manifesto-text">I partner with enterprise leaders to bridge the gap between legacy infrastructure and private AI operations. We help high-stakes professionals capture the revenue they're bleeding through fragmented software and manual friction. Instead of patching outdated systems, we use an organization's <span class="em">own private data</span> to build modern, automated operating platforms that eliminate manual touchpoints, latency, and compliance risk. Then we elevate them further — deploying fully private, self-hosted AI assistants engineered on their proprietary data. <span class="em">Complete institutional intelligence, without sensitive data ever leaving their firewall.</span></p>
+      <p class="manifesto-text" id="manifesto-text">We partner with enterprise leaders to bridge the gap between legacy infrastructure and private AI operations. We help high-stakes professionals capture the revenue they're bleeding through fragmented software and manual friction. Instead of patching outdated systems, we use an organization's <span class="em">own private data</span> to build modern, automated operating platforms that eliminate manual touchpoints, latency, and compliance risk. Then we elevate them further — deploying fully private, self-hosted AI assistants engineered on their proprietary data. <span class="em">Complete institutional intelligence, without sensitive data ever leaving their firewall.</span></p>
       <div class="manifesto-sig">— CHIEF EXECUTIVE OFFICER</div>
     </div>
   </div>
@@ -85,7 +136,7 @@
     <div class="tiers">
       <article class="tier" data-tilt>
         <div class="shine" aria-hidden="true"></div>
-        <div class="numeral foil">I</div>
+        <div class="numeral foil" aria-hidden="true">I</div>
         <div class="tn">TIER ONE</div>
         <h3>The Modern Operating Platform</h3>
         <p>We replace fragmented software and manual friction with one automated operating platform — built on your own data, shaped to how your organization actually runs.</p>
@@ -98,7 +149,7 @@
       </article>
       <article class="tier t2" data-tilt>
         <div class="shine" aria-hidden="true"></div>
-        <div class="numeral foil">II</div>
+        <div class="numeral foil" aria-hidden="true">II</div>
         <div class="tn">TIER TWO</div>
         <h3>Private, Self-Hosted AI</h3>
         <p>Your own AI assistants — trained and continually refined on your proprietary data, running entirely inside your walls.</p>
@@ -134,14 +185,15 @@
   <div class="wrap">
     <div class="kicker fade-up">Demonstration</div>
     <h2 class="sec fade-up">Ask. It answers.<br>From <span class="foil">your</span> evidence.</h2>
-    <p class="lead fade-up">A glimpse of the experience — an assistant grounded solely in an organization's own records, citing its sources.</p>
+    <p class="lead fade-up">A glimpse of the experience — an assistant grounded solely in an organization's own records, citing its sources. Click the terminal to skip the typing.</p>
     <div class="terminal fade-up">
       <div class="term-bar">
         <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
         <span class="title">aletheia — private-assistant — on-premises</span>
         <span class="badge">DEMONSTRATION</span>
       </div>
-      <div class="term-body" id="term-body" aria-live="polite"></div>
+      <div class="term-body" id="term-body" aria-hidden="true"></div>
+      <div class="sr-only" id="term-live" aria-live="polite"></div>
       <button class="term-next" id="term-next" type="button">ASK ANOTHER ▸</button>
     </div>
   </div>
@@ -177,22 +229,48 @@
       </div>
       <div class="fade-up">
         <table class="mail-table">
-          <tr><td>hello@</td><td>New business &amp; general inquiries</td></tr>
-          <tr><td>clients@</td><td>Active client engagements</td></tr>
-          <tr><td>support@</td><td>Platform &amp; service support</td></tr>
-          <tr><td>security@</td><td>Security disclosures &amp; questions</td></tr>
-          <tr><td>privacy@</td><td>Data privacy &amp; compliance</td></tr>
-          <tr><td>billing@</td><td>Invoices &amp; accounts</td></tr>
+          <tr><td><a href="mailto:hello@aletheiainstitute.ai">hello@</a></td><td>New business &amp; general inquiries</td></tr>
+          <tr><td><a href="mailto:clients@aletheiainstitute.ai">clients@</a></td><td>Active client engagements</td></tr>
+          <tr><td><a href="mailto:support@aletheiainstitute.ai">support@</a></td><td>Platform &amp; service support</td></tr>
+          <tr><td><a href="mailto:security@aletheiainstitute.ai">security@</a></td><td>Security disclosures &amp; questions</td></tr>
+          <tr><td><a href="mailto:privacy@aletheiainstitute.ai">privacy@</a></td><td>Data privacy &amp; compliance</td></tr>
+          <tr><td><a href="mailto:billing@aletheiainstitute.ai">billing@</a></td><td>Invoices &amp; accounts</td></tr>
         </table>
       </div>
     </div>
   </div>
 </section>
 
+<!-- COLOPHON — the site unconceals its own making -->
+<section id="colophon">
+  <div class="wrap">
+    <div class="kicker fade-up">How This Was Made</div>
+    <h2 class="sec fade-up">A collaboration, on the record.</h2>
+    <div class="ledger fade-up">
+      <div class="row"><span class="k">DIRECTION</span><span class="v">A human architect</span><span class="src">[source: judgment]</span></div>
+      <div class="row"><span class="k">ENGINEERING</span><span class="v">An AI collaborator — Claude, by Anthropic</span><span class="src">[source: partnership]</span></div>
+      <div class="row"><span class="k">CONSTELLATION</span><span class="v">Raw WebGL, written for this page alone</span><span class="src">[source: js/particles.js]</span></div>
+      <div class="row"><span class="k">TYPE</span><span class="v">Fraunces &amp; Inter, self-hosted</span><span class="src">[source: assets/fonts]</span></div>
+      <div class="row"><span class="k">PALETTE</span><span class="v">Complementary — gold H43 against navy H210–216, verified to WCAG AAA</span><span class="src">[source: color theory]</span></div>
+      <div class="row"><span class="k">EXTERNAL REQUESTS</span><span class="v">None. This site calls no one.</span><span class="src">[source: measured live below]</span></div>
+      <div class="row"><span class="k">REVIEW</span><span class="v">Every animation, claim, and contrast ratio checked by a person</span><span class="src">[source: the method]</span></div>
+      <p class="whisper">Built the way we build for clients: human intent, machine leverage, nothing concealed. — αλήθεια, some truths must be typed to be seen.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
 <footer>
-  <img class="seal-slow" src="assets/seal.svg" alt="">
+  <img class="seal-slow" id="footer-seal" src="assets/seal.svg" alt="">
   <div class="fm">VERITAS EX DATIS</div>
   <p class="promise">This site calls no one. Neither will your data.</p>
+  <div id="vitals" aria-label="Live page vitals">
+    <span>PAGE <b id="v-weight">—</b></span>
+    <span>EXTERNAL REQUESTS <b id="v-ext">—</b> <span class="live">measured live</span></span>
+    <span>FRAME RATE <b id="v-fps">—</b></span>
+    <span>PARTICLES <b id="v-particles">—</b></span>
+  </div>
   <p class="fine">© 2026 The Aletheia Institute · aletheiainstitute.ai · All rights reserved.</p>
 </footer>
 
@@ -201,5 +279,14 @@
 <script src="js/lenis.min.js"></script>
 <script src="js/particles.js"></script>
 <script src="js/main.js"></script>
+<script src="js/palette.js"></script>
+<script>
+/* Failsafe, dependency-free: if anything above failed, never trap the reader behind the loader. */
+setTimeout(function () {
+  var l = document.getElementById('loader');
+  if (l && l.parentNode) { l.parentNode.removeChild(l); }
+  document.body.classList.add('ready');
+}, 6500);
+</script>
 </body>
 </html>
