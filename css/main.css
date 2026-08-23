@@ -788,3 +788,23 @@ footer .made .whisper-em{color:var(--accent)}
 #vitals{color:var(--dim);border-color:rgba(11,31,51,.10)}
 #vitals b{color:var(--accent)}
 #vitals .live{color:var(--teal-deep)}
+
+/* ============================================================
+   STRATA — true parallax: watermark layers set deep in the
+   vellum, lagging the page as it scrolls. Different geometry
+   per section; contained so the layout never widens.
+   ============================================================ */
+.strata{position:absolute;inset:-12% 0;overflow:hidden;z-index:-1;pointer-events:none}
+.s-glyph{
+  position:absolute;font-family:var(--serif);font-weight:300;line-height:1;
+  color:rgba(11,31,51,.05);user-select:none;will-change:transform;
+}
+.s-glyph.s-teal{color:rgba(20,101,91,.055)}
+.s-ring{
+  position:absolute;border:1.5px solid rgba(122,94,42,.16);border-radius:50%;
+  will-change:transform;
+}
+
+/* The reveal mask exists only for the entrance — once the title has risen,
+   the mask releases and no box can ever clip a descender again. */
+body.revealed .hero-title .line{overflow:visible}

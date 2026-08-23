@@ -90,12 +90,14 @@
     if (reduced) {
       gsap.set('.hero-title .line > span', { yPercent: 0 });
       gsap.set('[data-hero-fade]', { opacity: 1, y: 0 });
+      document.body.classList.add('revealed');   // release the mask — nothing may clip
       return;
     }
     gsap.fromTo('.hero-title .line > span',
       { yPercent: 118 },
       { yPercent: 0, duration: 1.3, stagger: 0.14, ease: 'power4.out', delay: 0.25,
-        clearProps: 'transform' });
+        clearProps: 'transform',
+        onComplete: () => document.body.classList.add('revealed') });
     gsap.fromTo('[data-hero-fade]',
       { opacity: 0, y: 26 },
       { opacity: 1, y: 0, duration: 1.1, stagger: 0.1, ease: 'power3.out', delay: 0.8,
@@ -309,7 +311,7 @@
 
   /* ---------- Principles: depth parallax (gentle — never over the heading) ---------- */
   if (!reduced) {
-    document.querySelectorAll('#principles [data-depth]').forEach((el) => {
+    document.querySelectorAll('#principles .pr[data-depth]').forEach((el) => {
       const d = parseFloat(el.dataset.depth);
       gsap.to(el, {
         y: () => -(d * 70), ease: 'none',
@@ -333,6 +335,23 @@
       gsap.fromTo(sec, { '--pooly': '60px' }, {
         '--pooly': '-60px', ease: 'none',
         scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 0.8 }
+      });
+    });
+    // the strata: watermark geometry set deep in the vellum, lagging hard
+    document.querySelectorAll('[data-strata]').forEach((el) => {
+      const d = parseFloat(el.dataset.strata) || 0.5;
+      const sec = el.closest('section');
+      gsap.fromTo(el, { y: d * 260 }, {
+        y: -(d * 260), ease: 'none',
+        scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 0.9 }
+      });
+    });
+    // principles glyphs are that section's strata — give them real travel
+    document.querySelectorAll('#principles .glyph').forEach((el) => {
+      const d = parseFloat(el.dataset.depth) || 0.15;
+      gsap.fromTo(el, { y: d * 520 }, {
+        y: -(d * 520), ease: 'none',
+        scrollTrigger: { trigger: '#principles', start: 'top bottom', end: 'bottom top', scrub: 0.9 }
       });
     });
   }

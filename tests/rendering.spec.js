@@ -104,18 +104,10 @@ test('principles heading is never overlapped by its parallaxing cards', async ({
   expect(gap).toBeGreaterThan(4);   // the p's descender must breathe
 });
 
-test('hero descenders are never clipped by the reveal mask', async ({ page }) => {
+test('hero descenders are never clipped: the mask releases after the reveal', async ({ page }) => {
   await gotoSettled(page);
-  // wait for the entrance reveal to finish (clearProps removes the transform)
-  await page.waitForFunction(() => {
-    const s = document.querySelectorAll('.hero-title .line')[1].querySelector('span');
-    return getComputedStyle(s).transform === 'none';
-  }, null, { timeout: 8000 });
-  // the mask line must extend past the glyph box of its inner span
-  const ok = await page.evaluate(() => {
-    const line = document.querySelectorAll('.hero-title .line')[1];
-    const span = line.querySelector('span');
-    return line.getBoundingClientRect().bottom - span.getBoundingClientRect().bottom;
-  });
-  expect(ok).toBeGreaterThan(8);   // generous padding room for Fraunces descenders
+  await page.waitForFunction(() => document.body.classList.contains('revealed'), null, { timeout: 10000 });
+  const overflows = await page.evaluate(() =>
+    [...document.querySelectorAll('.hero-title .line')].map(l => getComputedStyle(l).overflow));
+  for (const o of overflows) expect(o).toBe('visible');
 });
