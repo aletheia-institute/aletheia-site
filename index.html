@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Aletheia Institute — Veritas ex Datis</title>
+<meta name="description" content="The Aletheia Institute builds private, self-hosted AI operating platforms on your own data. Truth, from data — without your data ever leaving your firewall.">
+<link rel="icon" type="image/svg+xml" href="assets/seal.svg">
+<style>
+  :root{
+    --navy:#0B1F33; --navy2:#122C45; --card:#0E263D;
+    --gold:#E7C878; --gold2:#F3D89A; --teal:#2DD4BF;
+    --ink:#F4F7FA; --grey:#9FB2C4; --line:#244360;
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--navy);color:var(--ink);font-family:var(--sans);line-height:1.6}
+  a{color:var(--gold);text-decoration:none}
+  a:hover{color:var(--gold2)}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,31,51,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1100px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand img{height:40px;width:40px}
+  .brand span{font-family:var(--serif);font-weight:700;letter-spacing:2.5px;font-size:15px}
+  .nav-links{display:flex;gap:28px;font-size:14px}
+  .nav-links a{color:var(--grey)}
+  .nav-links a:hover{color:var(--gold)}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* HERO */
+  header.hero{text-align:center;padding:72px 24px 84px;border-bottom:1px solid var(--line)}
+  .hero img{height:190px;width:190px;margin-bottom:28px}
+  .hero h1{font-family:var(--serif);font-size:clamp(28px,4.5vw,44px);letter-spacing:8px;font-weight:700}
+  .motto{margin-top:14px;font-family:var(--serif);letter-spacing:4px;font-size:14px;color:var(--gold)}
+  .motto em{color:var(--grey);letter-spacing:1px;font-style:italic;margin-left:10px}
+  .rule{width:90px;height:2px;background:var(--gold);margin:26px auto}
+  .hero h2{font-family:var(--serif);font-size:clamp(20px,3vw,30px);font-weight:700;max-width:760px;margin:0 auto}
+  .hero p.sub{color:var(--grey);max-width:680px;margin:18px auto 0;font-size:17px}
+  .cta-row{margin-top:36px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:13px 30px;border-radius:4px;font-weight:600;font-size:15px}
+  .btn-gold{background:var(--gold);color:var(--navy)}
+  .btn-gold:hover{background:var(--gold2);color:var(--navy)}
+  .btn-ghost{border:1px solid var(--gold);color:var(--gold)}
+
+  section{padding:76px 0;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--serif);letter-spacing:3px;font-size:13px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+  h3.sec{font-family:var(--serif);font-size:clamp(24px,3vw,32px);margin-bottom:8px}
+  .sec-rule{width:70px;height:2px;background:var(--gold);margin:18px 0 34px}
+  p.lead{color:var(--grey);max-width:800px;font-size:16.5px}
+
+  /* CEO message */
+  .message{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:6px;padding:38px 42px;max-width:860px}
+  .message p{color:var(--ink);font-size:17px;margin-bottom:18px}
+  .message p:last-child{margin-bottom:0}
+  .message .sig{font-family:var(--serif);color:var(--gold);letter-spacing:1px;font-size:14px;margin-top:8px}
+
+  /* Tiers */
+  .tiers{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px}
+  @media(max-width:800px){.tiers{grid-template-columns:1fr}}
+  .tier{background:var(--navy2);border:1px solid var(--line);border-radius:8px;padding:34px;position:relative;overflow:hidden}
+  .tier::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--gold)}
+  .tier.t2::before{background:var(--teal)}
+  .tier .tn{font-family:var(--serif);letter-spacing:3px;font-size:13px;color:var(--gold);margin-bottom:10px}
+  .tier.t2 .tn{color:var(--teal)}
+  .tier h4{font-family:var(--serif);font-size:22px;margin-bottom:14px}
+  .tier p{color:var(--grey);font-size:15px;margin-bottom:16px}
+  .tier ul{list-style:none}
+  .tier li{padding-left:26px;position:relative;color:var(--ink);font-size:14.5px;margin-bottom:10px}
+  .tier li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700}
+  .tier.t2 li::before{color:var(--teal)}
+
+  /* Method */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media(max-width:860px){.steps{grid-template-columns:repeat(2,1fr)}}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:26px 22px}
+  .step .num{font-family:var(--serif);font-size:30px;color:var(--gold);margin-bottom:8px}
+  .step h5{font-family:var(--serif);font-size:17px;margin-bottom:8px}
+  .step p{color:var(--grey);font-size:13.5px}
+  .method-note{margin-top:28px;color:var(--grey);font-size:15px;max-width:820px}
+  .method-note b{color:var(--teal)}
+
+  /* Principles */
+  .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:800px){.principles{grid-template-columns:1fr}}
+  .pr{background:var(--navy2);border:1px solid var(--line);border-radius:8px;padding:28px}
+  .pr h5{font-family:var(--serif);color:var(--gold);font-size:16px;letter-spacing:1px;margin-bottom:10px}
+  .pr p{color:var(--grey);font-size:14px}
+
+  /* Contact */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  @media(max-width:800px){.contact-grid{grid-template-columns:1fr}}
+  .mail-table{width:100%;border-collapse:collapse}
+  .mail-table td{padding:11px 8px;border-bottom:1px solid var(--line);font-size:14.5px}
+  .mail-table td:first-child{font-family:ui-monospace,Menlo,monospace;color:var(--gold);white-space:nowrap;padding-right:22px}
+  .mail-table td:last-child{color:var(--grey)}
+
+  footer{padding:48px 24px;text-align:center}
+  footer img{height:56px;width:56px;opacity:.9;margin-bottom:14px}
+  footer .fm{font-family:var(--serif);letter-spacing:3px;font-size:12px;color:var(--gold)}
+  footer p{color:var(--grey);font-size:12.5px;margin-top:10px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><img src="assets/seal.svg" alt="The Aletheia Institute seal"><span>THE ALETHEIA INSTITUTE</span></div>
+    <div class="nav-links">
+      <a href="#approach">Approach</a>
+      <a href="#services">Services</a>
+      <a href="#method">Method</a>
+      <a href="#principles">Principles</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <img src="assets/seal.svg" alt="The Aletheia Institute — seal">
+  <h1>THE ALETHEIA INSTITUTE</h1>
+  <div class="motto">VERITAS EX DATIS <em>truth, from data</em></div>
+  <div class="rule"></div>
+  <h2>Talk to your data. Ethically. On your terms.</h2>
+  <p class="sub">We build private, self-hosted AI operating platforms engineered directly on your organization's own data — institutional intelligence that never leaves your firewall.</p>
+  <div class="cta-row">
+    <a class="btn btn-gold" href="#contact">Start a Conversation</a>
+    <a class="btn btn-ghost" href="#services">What We Do</a>
+  </div>
+</header>
+
+<section id="approach">
+  <div class="wrap">
+    <div class="kicker">From Our Leadership</div>
+    <h3 class="sec">Bridging legacy infrastructure and private AI operations.</h3>
+    <div class="sec-rule"></div>
+    <div class="message">
+      <p>I partner with enterprise leaders to bridge the gap between legacy infrastructure and private AI operations.</p>
+      <p>At The Aletheia Institute, we help high-stakes professionals and business owners capture the massive revenue they're bleeding through fragmented software and manual operational friction. Instead of patching outdated systems, we use an organization's own private data to build modern, automated operating platforms that systematically eliminate manual touchpoints, latency, and compliance risk.</p>
+      <p>From there, we elevate them to tier two: deploying fully private, self-hosted AI assistants engineered directly on their proprietary data — giving them complete institutional intelligence without their sensitive data ever leaving their firewall.</p>
+      <p class="sig">— Chief Executive Officer, The Aletheia Institute</p>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="kicker">What We Do</div>
+    <h3 class="sec">Two tiers. One trajectory.</h3>
+    <div class="sec-rule"></div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tn">TIER ONE</div>
+        <h4>The Modern Operating Platform</h4>
+        <p>We replace fragmented software and manual friction with one automated operating platform — built on your own data, shaped to how your organization actually runs.</p>
+        <ul>
+          <li>Systematic elimination of manual touchpoints and latency</li>
+          <li>Unified, compliance-ready data architecture</li>
+          <li>Modern workflows engineered around your operation — not a vendor's template</li>
+          <li>Full audit, security, and regulatory posture from day one</li>
+        </ul>
+      </div>
+      <div class="tier t2">
+        <div class="tn">TIER TWO</div>
+        <h4>Private, Self-Hosted AI</h4>
+        <p>Your own AI assistants — trained and continually refined on your proprietary data, running entirely inside your walls.</p>
+        <ul>
+          <li>Fully private, self-hosted models — data never leaves your firewall</li>
+          <li>Continuous training cycles on your cadence, run as a science</li>
+          <li>Retrieval and reasoning engineered on your institutional knowledge</li>
+          <li>Complete observability: measure, verify, and trust every answer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="kicker">How We Work</div>
+    <h3 class="sec">The scientific method, applied to your data.</h3>
+    <div class="sec-rule"></div>
+    <div class="steps">
+      <div class="step"><div class="num">01</div><h5>Hypothesize</h5><p>Define what your platform and your AI should do better — precisely, measurably.</p></div>
+      <div class="step"><div class="num">02</div><h5>Train</h5><p>Fine-tune models on your latest data and engineer their reasoning on your knowledge.</p></div>
+      <div class="step"><div class="num">03</div><h5>Measure</h5><p>Every cycle scored against evidence — accuracy, quality, drift — on live dashboards.</p></div>
+      <div class="step"><div class="num">04</div><h5>Refine</h5><p>Keep what works. Discard what doesn't. Repeat. Your systems get smarter on schedule.</p></div>
+    </div>
+    <p class="method-note">Observability is not an afterthought — it is the instrument panel. <b>If it isn't measured, it isn't trusted.</b> Every model, every pipeline, and every workflow we deploy reports its own vitals.</p>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+    <div class="kicker">What We Stand On</div>
+    <h3 class="sec">Principles before product.</h3>
+    <div class="sec-rule"></div>
+    <div class="principles">
+      <div class="pr"><h5>SOVEREIGNTY</h5><p>Your data is yours. It trains your models, powers your platform, and never crosses your firewall. We build on it — we never take it.</p></div>
+      <div class="pr"><h5>TRUTH</h5><p>Aletheia is the Greek word for truth as unconcealment. Every answer our systems give is grounded in your evidence, with lineage you can inspect.</p></div>
+      <div class="pr"><h5>RIGOR</h5><p>Enterprise-hardened engineering: tested, versioned, observable, and compliant. Built once, built right — by people who have run systems that cannot fail.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="kicker">Contact</div>
+    <h3 class="sec">Start the conversation.</h3>
+    <div class="sec-rule"></div>
+    <div class="contact-grid">
+      <div>
+        <p class="lead">Whether you are commissioning a platform, exploring private AI on your own data, or simply want a candid assessment of where your operation is bleeding time and revenue — write to us. A principal answers every inquiry.</p>
+        <p style="margin-top:22px"><a class="btn btn-gold" href="mailto:hello@aletheiainstitute.ai">hello@aletheiainstitute.ai</a></p>
+      </div>
+      <div>
+        <table class="mail-table">
+          <tr><td>hello@</td><td>New business &amp; general inquiries</td></tr>
+          <tr><td>clients@</td><td>Active client engagements</td></tr>
+          <tr><td>support@</td><td>Platform &amp; service support</td></tr>
+          <tr><td>security@</td><td>Security disclosures &amp; questions</td></tr>
+          <tr><td>privacy@</td><td>Data privacy &amp; compliance</td></tr>
+          <tr><td>billing@</td><td>Invoices &amp; accounts</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <img src="assets/seal.svg" alt="">
+  <div class="fm">VERITAS EX DATIS</div>
+  <p>© 2026 The Aletheia Institute · aletheiainstitute.ai · All rights reserved.</p>
+</footer>
+
+</body>
+</html>
