@@ -27,36 +27,39 @@
   /* ---------- Capability budget (review: no unbounded desktop tier) ---------- */
   const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 760;
   const lowTier = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
-  const BUDGET = isMobile ? 4600 : (lowTier ? 9500 : 28000);
+  const BUDGET = isMobile ? 5200 : (lowTier ? 10000 : 36000);
 
-  /* ---------- The seal cloud (shipped, packed Int16, two classes) ----------
-     gold-artwork points come first, then the navy field; each mote knows
-     which it is, and wears the livery accordingly. */
+  /* ---------- The seal cloud: COLOR-ACCURATE ----------
+     Every point carries the true color of the pixel it came from.
+     Artwork points first (full presence), then the field (a breath quieter). */
   function sealCloud() {
     const cloud = window.__ALETHEIA_EMBLEM;
-    const goldCount = window.__ALETHEIA_EMBLEM_GOLD || 0;
-    if (cloud && cloud.length >= 4 && cloud.length % 2 === 0) {
+    const color = window.__ALETHEIA_EMBLEM_COLOR;
+    const artCount = window.__ALETHEIA_EMBLEM_ART || 0;
+    if (cloud && color && cloud.length >= 4 && cloud.length % 2 === 0) {
       const total = cloud.length / 2;
       const step = Math.max(1, Math.ceil(total / BUDGET));
-      const pts = [], metal = [];
+      const pts = [], cols = [], ascale = [];
       for (let i = 0; i + 1 < cloud.length; i += 2 * step) {
+        const j = i / 2;
         pts.push(cloud[i], cloud[i + 1]);
-        metal.push((i / 2) < goldCount ? 1 : 0);
+        cols.push(color[j*3], color[j*3+1], color[j*3+2]);
+        ascale.push(j < artCount ? 1.0 : 0.55);
       }
-      return { pts, metal };
+      return { pts, cols, ascale, art: Math.ceil(artCount / step) };
     }
-    const pts = [], metal = [];                       // last-resort ring
+    const pts = [], cols = [], ascale = [];           // last-resort ring
     for (let i = 0; i < 900; i++) {
       const a = (i / 900) * Math.PI * 2;
       pts.push(Math.cos(a) * 0.94, Math.sin(a) * 0.94);
-      metal.push(1);
+      cols.push(0.725, 0.584, 0.286);
+      ascale.push(1.0);
     }
-    return { pts, metal };
+    return { pts, cols, ascale, art: 900 };
   }
 
   const CLOUD = sealCloud();
   const SEAL = CLOUD.pts;
-  const METAL = CLOUD.metal;
   const EMB = SEAL.length / 2;
   // measured bounds — the fit math derives from data, never from a literal
   let sxMin = 1e9, sxMax = -1e9, syMin = 1e9, syMax = -1e9;
@@ -74,7 +77,7 @@
   const T = new Float32Array(COUNT * 2);
   const RAND = new Float32Array(COUNT * 4);           // phase, speed, cloudX, cloudY
   const SIZE = new Float32Array(COUNT);               // base size variance (static)
-  const STATIC = new Float32Array(COUNT * 6);         // size, phase, speed, kind, tint, metal
+  const STATIC = new Float32Array(COUNT * 9);         // size, phase, speed, kind, tint, ascale, r, g, b
 
   let W = 0, H = 0, DPR = 1;
 
@@ -84,13 +87,25 @@
     RAND[i*4+1] = 0.5 + Math.random();
     RAND[i*4+2] = Math.random();
     RAND[i*4+3] = Math.random();
-    SIZE[i] = isEmblem ? 0.55 + Math.random() * 0.5 : 0.45 + Math.random() * 0.7;
-    STATIC[i*6]   = SIZE[i];
-    STATIC[i*6+1] = RAND[i*4];
-    STATIC[i*6+2] = RAND[i*4+1];
-    STATIC[i*6+3] = isEmblem ? 1 : 0;
-    STATIC[i*6+4] = Math.random() < 0.04 ? 1 : 0;     // teal seeds await the word
-    STATIC[i*6+5] = isEmblem ? METAL[i] : (Math.random() < 0.5 ? 1 : 0);
+    // figure over ground: artwork motes larger, field motes finer
+    const classMul = isEmblem ? (CLOUD.ascale[i] >= 1.0 ? 1.18 : 0.6) : 1.0;
+    SIZE[i] = (isEmblem ? 0.55 + Math.random() * 0.5 : 0.45 + Math.random() * 0.7) * classMul;
+    STATIC[i*9]   = SIZE[i];
+    STATIC[i*9+1] = RAND[i*4];
+    STATIC[i*9+2] = RAND[i*4+1];
+    STATIC[i*9+3] = isEmblem ? 1 : 0;
+    STATIC[i*9+4] = Math.random() < 0.04 ? 1 : 0;     // teal seeds await the word
+    STATIC[i*9+5] = isEmblem ? CLOUD.ascale[i] : 1.0;
+    if (isEmblem) {
+      STATIC[i*9+6] = CLOUD.cols[i*3];
+      STATIC[i*9+7] = CLOUD.cols[i*3+1];
+      STATIC[i*9+8] = CLOUD.cols[i*3+2];
+    } else {                                          // ambient dust: quiet livery mix
+      const m = Math.random() < 0.5;
+      STATIC[i*9+6] = m ? 0.478 : 0.043;
+      STATIC[i*9+7] = m ? 0.369 : 0.122;
+      STATIC[i*9+8] = m ? 0.165 : 0.200;
+    }
   }
 
   /* ---------- Scene target generators (viewport px) ---------- */
@@ -240,7 +255,8 @@
     attribute float a_speed;
     attribute float a_kind;      // 1 emblem, 0 ambient dust
     attribute float a_tint;
-    attribute float a_metal;     // 1 gold artwork, 0 the navy field
+    attribute float a_ascale;    // artwork full, field a breath quieter
+    attribute vec3 a_col;        // the pixel's true color
     uniform vec2 u_res;
     uniform float u_dpr;
     uniform float u_time;
@@ -249,8 +265,7 @@
     uniform float u_sizeMul;
     varying float v_alpha;
     varying float v_tint;
-    varying float v_seed;
-    varying float v_metal;
+    varying vec3 v_color;
     void main() {
       vec2 clip = (a_pos / u_res) * 2.0 - 1.0;
       gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
@@ -260,31 +275,23 @@
       gl_PointSize = mix(ambSize, embSize, a_kind) * u_dpr;
       float embA = (0.42 + 0.50 * twinkle) * u_asm * u_alphaMul;
       float ambA = (0.06 + 0.11 * twinkle) * u_asm;
-      // the navy field sits a register quieter than the artwork upon it
-      v_alpha = mix(ambA, embA * mix(0.62, 1.0, a_metal), a_kind);
+      v_alpha = mix(ambA, embA * a_ascale, a_kind);
       v_tint = a_tint;
-      v_seed = fract(a_size * 13.7);
-      v_metal = a_metal;
+      v_color = a_col;
     }`;
   const fsrc = `
     precision mediump float;
     varying float v_alpha;
     varying float v_tint;
-    varying float v_seed;
-    varying float v_metal;
+    varying vec3 v_color;
     uniform float u_teal;
     void main() {
       vec2 d = gl_PointCoord - 0.5;
       float r = length(d);
       float glow = smoothstep(0.5, 0.0, r);
       glow *= glow;
-      vec3 midnight = vec3(0.043, 0.122, 0.200);   // Aletheia Midnight #0B1F33
-      vec3 bronze = vec3(0.478, 0.369, 0.165);     // Ledger Bronze #7A5E2A
-      vec3 goldDeep = vec3(0.725, 0.584, 0.286);   // Gold Deep #B99549
       vec3 teal = vec3(0.078, 0.396, 0.357);       // Verity Teal, daylight cut
-      vec3 metalCol = mix(bronze, goldDeep, v_seed);
-      vec3 base = mix(metalCol, midnight, v_metal);   // inverted: ink engraving on a gold-lit field
-      vec3 col = mix(base, teal, v_tint * u_teal);
+      vec3 col = mix(v_color, teal, v_tint * u_teal);   // the pixel's own color, always
       gl_FragColor = vec4(col, glow * v_alpha * (1.0 + v_tint * u_teal * 0.6));
     }`;
 
@@ -324,10 +331,13 @@
     const bind1 = (name, offset) => {
       const loc = gl.getAttribLocation(prog, name);
       gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, 1, gl.FLOAT, false, 24, offset);
+      gl.vertexAttribPointer(loc, 1, gl.FLOAT, false, 36, offset);
     };
     bind1('a_size', 0); bind1('a_phase', 4); bind1('a_speed', 8);
-    bind1('a_kind', 12); bind1('a_tint', 16); bind1('a_metal', 20);
+    bind1('a_kind', 12); bind1('a_tint', 16); bind1('a_ascale', 20);
+    const colLoc = gl.getAttribLocation(prog, 'a_col');
+    gl.enableVertexAttribArray(colLoc);
+    gl.vertexAttribPointer(colLoc, 3, gl.FLOAT, false, 36, 24);
 
     // dynamic position buffer: the only per-frame upload (8 bytes/particle)
     dynVbo = gl.createBuffer();

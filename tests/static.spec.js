@@ -148,14 +148,15 @@ test.describe('static: the promise', () => {
     const m = data.match(/atob\("([A-Za-z0-9+/=]+)"\)/);
     expect(m, 'packed base64 payload missing').toBeTruthy();
     const bytes = Buffer.from(m[1], 'base64');
-    expect(bytes.length % 4).toBe(0);                       // int16 (x,y) pairs
-    const points = bytes.length / 4;
-    expect(points).toBeGreaterThanOrEqual(20000);           // full-fidelity floor
-    const i16 = new Int16Array(bytes.buffer, bytes.byteOffset, bytes.length / 2);
-    for (let i = 0; i < i16.length; i += 997) {             // spot-check normalization
-      expect(Math.abs(i16[i])).toBeLessThanOrEqual(1000);
+    expect(bytes.length % 5).toBe(0);                       // int16 x, int16 y, uint8 color
+    const points = bytes.length / 5;
+    expect(points).toBeGreaterThanOrEqual(30000);           // color-accurate fidelity floor
+    for (let i = 0; i < points; i += 499) {                 // spot-check normalization
+      expect(Math.abs(bytes.readInt16LE(i * 5))).toBeLessThanOrEqual(1000);
+      expect(bytes[i * 5 + 4]).toBeLessThan(32);            // palette index in range
     }
-    expect(data.length, 'emblem payload budget (200KB)').toBeLessThan(200 * 1024);
+    expect(data).toContain('__ALETHEIA_EMBLEM_COLOR');      // true colors ship
+    expect(data.length, 'emblem payload budget (320KB — the logo outranks the byte count)').toBeLessThan(320 * 1024);
     expect(read('index.html')).toContain('js/emblem-data.js');
     expect(existsSync(join(root, 'scripts/generate-emblem.sh'))).toBe(true);  // reproducible
   });
