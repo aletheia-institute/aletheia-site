@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => readFileSync(join(root, p), 'utf8');
 
-const RUNTIME_FILES = ['index.html', 'css/main.css', 'js/main.js', 'js/particles.js', 'js/palette.js'];
+const RUNTIME_FILES = ['index.html', 'css/main.css', 'js/main.js', 'js/particles.js', 'js/palette.js', 'js/inquiry.js', 'js/emblem-data.js'];
 
 test.describe('static: the livery', () => {
   const tokens = JSON.parse(read('tokens.json'));
@@ -140,6 +140,14 @@ test.describe('static: the promise', () => {
     expect(html).toContain('inquiry@aletheiainstitute.ai');
     expect(html).toContain('Nothing is transmitted silently');
     expect(read('js/inquiry.js')).toContain('inquiry@aletheiainstitute.ai');
+  });
+
+  test('the full seal ships as a point cloud for the constellation', () => {
+    const data = read('js/emblem-data.js');
+    expect(data).toContain('window.__ALETHEIA_EMBLEM');
+    const nums = data.match(/-?\d+\.?\d*/g) || [];
+    expect(nums.length).toBeGreaterThan(8000);   // ≥4000 points — full-detail emblem
+    expect(read('index.html')).toContain('js/emblem-data.js');
   });
 
   test('demonstration: at least 4 exchanges, none of them GI-specific', () => {

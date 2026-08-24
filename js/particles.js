@@ -18,8 +18,26 @@
 
   const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 760;
 
-  /* ---------- Emblem geometry (normalized, centered, r≈1) ---------- */
+  /* ---------- Emblem geometry (normalized, centered, r≈1) ----------
+     Preferred source: the FULL seal — inscription, laurel, banner, all of
+     it — sampled from the real artwork into js/emblem-data.js. The
+     procedural outline below remains as a fallback if the data is absent. */
+  let cloudMode = false;
   function buildTargets() {
+    const cloud = window.__ALETHEIA_EMBLEM;
+    if (cloud && cloud.length > 2000) {
+      cloudMode = true;
+      const pts = [];
+      const step = isMobile ? 2 : 1;                 // subsample on small devices
+      for (let i = 0; i < cloud.length; i += 2 * step) {
+        pts.push({
+          x: cloud[i], y: cloud[i + 1],
+          s: 0.55 + Math.random() * 0.5,             // finer motes: detail needs them
+          tint: Math.random() < 0.04 ? 1 : 0
+        });
+      }
+      return pts;
+    }
     const pts = [];
     const push = (x, y, s, tint) => pts.push({ x, y, s: s || 1, tint: tint || 0 });
 
@@ -125,7 +143,7 @@
     canvas.width = W * DPR; canvas.height = H * DPR;
     if (!lost) gl.viewport(0, 0, canvas.width, canvas.height);
     cx = W / 2; cy = H * 0.44;
-    scale = Math.min(W, H) * 0.36;
+    scale = Math.min(W, H) * 0.41;   // go big — the seal presides
     for (let i = 0; i < COUNT; i++) {
       if (i < targets.length) {
         T[i*2]   = cx + targets[i].x * scale;
@@ -298,9 +316,11 @@
       const twinkle = 0.72 + 0.28 * Math.sin(t * spd * 2.1 + ph * 3.0);
       buf[i5]   = P[i2];
       buf[i5+1] = P[i2+1];
-      buf[i5+2] = (4.8 + META[i2] * 5.6) * (isEmblem ? 1 : 0.72);
+      buf[i5+2] = isEmblem
+        ? (cloudMode ? 3.1 + META[i2] * 3.4 : 4.8 + META[i2] * 5.6)   // fine motes resolve the inscription
+        : (4.8 + META[i2] * 5.6) * 0.72;
       buf[i5+3] = isEmblem
-        ? (0.34 + 0.55 * twinkle) * asm * (1 - dis)
+        ? ((cloudMode ? 0.30 : 0.34) + (cloudMode ? 0.46 : 0.55) * twinkle) * asm * (1 - dis)
         : (0.06 + 0.11 * twinkle) * asm * (1 - dis * 0.55);
       buf[i5+4] = META[i2+1];
     }
