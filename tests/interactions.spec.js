@@ -166,6 +166,22 @@ test.describe('mobile navigation', () => {
   });
 });
 
+test.describe('the coin', () => {
+  test('click flips the seal to its reverse and back; keyboard works too', async ({ page }) => {
+    await gotoSettled(page);
+    const coin = page.locator('#footer-seal');
+    await coin.scrollIntoViewIfNeeded();
+    await expect(coin).toHaveAttribute('aria-pressed', 'false');
+    await coin.click();
+    await expect(coin).toHaveClass(/flipped/);
+    await expect(coin).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.coin-back .cb-word')).toHaveText('ΑΛΗΘΕΙΑ');
+    await expect(page.locator('.coin-back .cb-line').first()).toContainText('Truth is not told');
+    await coin.press('Enter');
+    await expect(coin).not.toHaveClass(/flipped/);
+  });
+});
+
 test.describe('vitals', () => {
   test('external requests measure ZERO, live, on the page itself', async ({ page }) => {
     await gotoSettled(page);

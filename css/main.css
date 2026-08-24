@@ -50,7 +50,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:auto;scroll-padding-top:100px}
+html{scroll-behavior:auto;scroll-padding-top:124px}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 
@@ -178,7 +178,7 @@ nav{
 nav.scrolled{background:rgba(7,10,15,.74);backdrop-filter:blur(14px);border-color:var(--line)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;max-width:1240px;margin:0 auto;gap:18px}
 .brand{display:flex;align-items:center;gap:13px}
-.brand img{height:54px;width:54px}
+.brand img{height:76px;width:76px;transform-origin:left center;will-change:transform}
 .brand span{font-family:var(--serif);font-weight:600;letter-spacing:3px;font-size:13.5px;color:var(--fg)}
 .nav-links{display:flex;gap:22px;font-size:13px;letter-spacing:.6px}
 .nav-links a{color:var(--dim);position:relative;padding:12px 4px}
@@ -558,10 +558,46 @@ footer{
   padding:90px 24px 60px;text-align:center;border-top:1px solid var(--line);
   position:relative;
 }
-footer .seal-slow{height:132px;width:132px;margin-bottom:24px;animation:spin 120s linear infinite}
-footer .seal-slow.pulse{animation:spin 120s linear infinite, sealpulse 1.2s ease-in-out 2}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes sealpulse{50%{filter:drop-shadow(0 0 18px rgba(63,191,174,.8))}}
+/* The coin: still by default, glossed by light, flipped by curiosity */
+.coin{
+  width:150px;height:150px;margin:0 auto 24px;perspective:900px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.coin-inner{
+  position:relative;width:100%;height:100%;
+  transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,1.4,.4,1);
+}
+.coin.flipped .coin-inner{transform:rotateY(180deg)}
+.coin.pulse .coin-inner{box-shadow:0 0 34px rgba(63,191,174,.8);border-radius:50%}
+.coin-face{
+  position:absolute;inset:0;border-radius:50%;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.coin-front img{width:100%;height:100%}
+.coin-shine{
+  position:absolute;inset:-30%;pointer-events:none;
+  background:linear-gradient(115deg,transparent 42%,rgba(255,246,214,.5) 50%,transparent 58%);
+  transform:translateX(-120%);
+  animation:coinshine 5.5s ease-in-out infinite;
+}
+@keyframes coinshine{
+  0%,72%{transform:translateX(-120%)}88%{transform:translateX(120%)}100%{transform:translateX(120%)}
+}
+.coin-back{
+  transform:rotateY(180deg);
+  background:radial-gradient(circle at 38% 30%,#16324F,var(--aletheia-midnight) 70%);
+  border:3px solid var(--gold-deep);
+  color:var(--institute-ivory);gap:4px;
+}
+.coin-back .cb-word{font-family:var(--serif);letter-spacing:3px;font-size:15px;color:var(--veritas-gold)}
+.coin-back .cb-line{font-family:var(--serif);font-style:italic;font-size:10.5px;color:rgba(246,243,234,.85);line-height:1.3}
+.coin-back .cb-year{font-family:var(--serif);letter-spacing:2px;font-size:9px;color:var(--gold-deep);margin-top:5px}
+@media (prefers-reduced-motion:reduce){
+  .coin-inner{transition:none}
+  .coin-shine{display:none}
+}
 footer .fm{font-family:var(--serif);letter-spacing:4px;font-size:12px;color:var(--gold)}
 footer .promise{
   margin-top:22px;font-family:var(--serif);font-style:italic;

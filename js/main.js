@@ -42,7 +42,7 @@
       e.preventDefault();
       if (lenis) {
         lenis.start();     // a stopped Lenis (mobile menu open) silently drops scrollTo
-        lenis.scrollTo(el, { offset: -90, duration: 1.4 });
+        lenis.scrollTo(el, { offset: -108, duration: 1.4 });
       } else el.scrollIntoView();
       try { history.pushState(null, '', href); } catch (err) {}
       el.setAttribute('tabindex', '-1');
@@ -508,7 +508,7 @@
 
   /* ---------- Pause cosmetic animations offscreen (battery respect) ---------- */
   {
-    const pausables = document.querySelectorAll('.foil, .seal-slow');
+    const pausables = document.querySelectorAll('.foil');
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
         en.target.style.animationPlayState = en.isIntersecting ? 'running' : 'paused';
@@ -544,6 +544,38 @@
         setTimeout(() => footerSeal.classList.remove('pulse'), 3000);
       }
     });
+  }
+
+  /* ---------- The coin: flip to read the reverse ---------- */
+  {
+    const coin = document.getElementById('footer-seal');
+    if (coin) {
+      const flip = () => {
+        const on = coin.classList.toggle('flipped');
+        coin.setAttribute('aria-pressed', String(on));
+      };
+      coin.addEventListener('click', flip);
+      coin.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+      });
+    }
+  }
+
+  /* ---------- Zoom-pinned crest: the header seal holds its apparent size.
+     Browser zoom moves devicePixelRatio; we counter-scale the mark alone
+     (clamped) so the crest stays legible at any zoom level. ---------- */
+  {
+    const mark = document.querySelector('.brand img');
+    if (mark) {
+      const baseDPR = window.devicePixelRatio || 1;
+      const pin = () => {
+        const z = (window.devicePixelRatio || 1) / baseDPR;
+        const scale = Math.min(1.6, Math.max(0.6, 1 / z));
+        mark.style.transform = scale === 1 ? '' : `scale(${scale})`;
+      };
+      window.addEventListener('resize', pin);
+      pin();
+    }
   }
 
   /* ---------- Vitals: measured live, never merely claimed ---------- */

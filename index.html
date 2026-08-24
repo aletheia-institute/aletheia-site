@@ -260,7 +260,21 @@
 </main>
 
 <footer>
-  <img class="seal-slow" id="footer-seal" src="assets/seal.svg" alt="">
+  <div class="coin" id="footer-seal" role="button" tabindex="0" aria-pressed="false"
+       aria-label="Flip the seal to read its reverse">
+    <div class="coin-inner">
+      <div class="coin-face coin-front">
+        <img src="assets/seal.svg" alt="">
+        <span class="coin-shine" aria-hidden="true"></span>
+      </div>
+      <div class="coin-face coin-back">
+        <span class="cb-word">ΑΛΗΘΕΙΑ</span>
+        <span class="cb-line">Truth is not told.</span>
+        <span class="cb-line">It is revealed.</span>
+        <span class="cb-year">MMXXVI</span>
+      </div>
+    </div>
+  </div>
   <div class="fm">VERITAS EX DATIS</div>
   <p class="promise">This site calls no one. Neither will your data.</p>
   <p class="made">Built the way we build for clients: human intent, machine leverage, nothing concealed. <span class="whisper-em">— αλήθεια, some truths must be typed to be seen.</span></p>

@@ -28,7 +28,7 @@
     if (cloud && cloud.length > 2000) {
       cloudMode = true;
       const pts = [];
-      const step = isMobile ? 2 : 1;                 // subsample on small devices
+      const step = isMobile ? 3 : 1;                 // subsample on small devices
       for (let i = 0; i < cloud.length; i += 2 * step) {
         pts.push({
           x: cloud[i], y: cloud[i + 1],
@@ -317,10 +317,10 @@
       buf[i5]   = P[i2];
       buf[i5+1] = P[i2+1];
       buf[i5+2] = isEmblem
-        ? (cloudMode ? 3.1 + META[i2] * 3.4 : 4.8 + META[i2] * 5.6)   // fine motes resolve the inscription
+        ? (cloudMode ? 3.7 + META[i2] * 3.9 : 4.8 + META[i2] * 5.6)   // fine motes resolve the inscription
         : (4.8 + META[i2] * 5.6) * 0.72;
       buf[i5+3] = isEmblem
-        ? ((cloudMode ? 0.30 : 0.34) + (cloudMode ? 0.46 : 0.55) * twinkle) * asm * (1 - dis)
+        ? ((cloudMode ? 0.35 : 0.34) + (cloudMode ? 0.50 : 0.55) * twinkle) * asm * (1 - dis)
         : (0.06 + 0.11 * twinkle) * asm * (1 - dis * 0.55);
       buf[i5+4] = META[i2+1];
     }
