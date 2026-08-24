@@ -146,7 +146,7 @@ test.describe('static: the promise', () => {
     const data = read('js/emblem-data.js');
     expect(data).toContain('window.__ALETHEIA_EMBLEM');
     const nums = data.match(/-?\d+\.?\d*/g) || [];
-    expect(nums.length).toBeGreaterThan(8000);   // ≥4000 points — full-detail emblem
+    expect(nums.length).toBeGreaterThan(24000);  // ≥12k points — full-fidelity crest, no half-measures
     expect(read('index.html')).toContain('js/emblem-data.js');
   });
 

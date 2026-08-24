@@ -28,7 +28,7 @@
     if (cloud && cloud.length > 2000) {
       cloudMode = true;
       const pts = [];
-      const step = isMobile ? 3 : 1;                 // subsample on small devices
+      const step = isMobile ? 4 : 1;                 // subsample on small devices
       for (let i = 0; i < cloud.length; i += 2 * step) {
         pts.push({
           x: cloud[i], y: cloud[i + 1],
@@ -142,8 +142,11 @@
     W = canvas.clientWidth; H = canvas.clientHeight;
     canvas.width = W * DPR; canvas.height = H * DPR;
     if (!lost) gl.viewport(0, 0, canvas.width, canvas.height);
-    cx = W / 2; cy = H * 0.44;
-    scale = Math.min(W, H) * 0.41;   // go big — the seal presides
+    cx = W / 2;
+    // full presence, but never under the header: fit below the nav band
+    const NAV = 122, PAD = 26;
+    scale = Math.min(Math.min(W, H) * 0.44, (H - NAV - PAD * 2) / 2.06);
+    cy = NAV + PAD + scale;
     for (let i = 0; i < COUNT; i++) {
       if (i < targets.length) {
         T[i*2]   = cx + targets[i].x * scale;
@@ -317,10 +320,10 @@
       buf[i5]   = P[i2];
       buf[i5+1] = P[i2+1];
       buf[i5+2] = isEmblem
-        ? (cloudMode ? 3.7 + META[i2] * 3.9 : 4.8 + META[i2] * 5.6)   // fine motes resolve the inscription
+        ? (cloudMode ? 2.9 + META[i2] * 2.9 : 4.8 + META[i2] * 5.6)   // fine motes; density draws the crest
         : (4.8 + META[i2] * 5.6) * 0.72;
       buf[i5+3] = isEmblem
-        ? ((cloudMode ? 0.35 : 0.34) + (cloudMode ? 0.50 : 0.55) * twinkle) * asm * (1 - dis)
+        ? ((cloudMode ? 0.42 : 0.34) + (cloudMode ? 0.50 : 0.55) * twinkle) * asm * (1 - dis)
         : (0.06 + 0.11 * twinkle) * asm * (1 - dis * 0.55);
       buf[i5+4] = META[i2+1];
     }
