@@ -42,7 +42,7 @@
       e.preventDefault();
       if (lenis) {
         lenis.start();     // a stopped Lenis (mobile menu open) silently drops scrollTo
-        lenis.scrollTo(el, { offset: -70, duration: 1.4 });
+        lenis.scrollTo(el, { offset: -90, duration: 1.4 });
       } else el.scrollIntoView();
       try { history.pushState(null, '', href); } catch (err) {}
       el.setAttribute('tabindex', '-1');
@@ -341,16 +341,16 @@
     document.querySelectorAll('[data-strata]').forEach((el) => {
       const d = parseFloat(el.dataset.strata) || 0.5;
       const sec = el.closest('section');
-      gsap.fromTo(el, { y: d * 260 }, {
-        y: -(d * 260), ease: 'none',
+      gsap.fromTo(el, { y: d * 430 }, {
+        y: -(d * 430), ease: 'none',
         scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 0.9 }
       });
     });
     // principles glyphs are that section's strata — give them real travel
     document.querySelectorAll('#principles .glyph').forEach((el) => {
       const d = parseFloat(el.dataset.depth) || 0.15;
-      gsap.fromTo(el, { y: d * 520 }, {
-        y: -(d * 520), ease: 'none',
+      gsap.fromTo(el, { y: d * 680 }, {
+        y: -(d * 680), ease: 'none',
         scrollTrigger: { trigger: '#principles', start: 'top bottom', end: 'bottom top', scrub: 0.9 }
       });
     });

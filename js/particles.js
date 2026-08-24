@@ -298,7 +298,7 @@
       const twinkle = 0.72 + 0.28 * Math.sin(t * spd * 2.1 + ph * 3.0);
       buf[i5]   = P[i2];
       buf[i5+1] = P[i2+1];
-      buf[i5+2] = (3.6 + META[i2] * 4.2) * (isEmblem ? 1 : 0.75);
+      buf[i5+2] = (4.8 + META[i2] * 5.6) * (isEmblem ? 1 : 0.72);
       buf[i5+3] = isEmblem
         ? (0.34 + 0.55 * twinkle) * asm * (1 - dis)
         : (0.06 + 0.11 * twinkle) * asm * (1 - dis * 0.55);
