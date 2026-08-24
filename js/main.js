@@ -167,8 +167,12 @@
     });
   }
 
-  /* ---------- Hero content recedes; the narrator carries on ---------- */
+  /* ---------- Hero: the seal disperses as you scroll past — then nothing ---------- */
   if (!reduced) {
+    ScrollTrigger.create({
+      trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.5,
+      onUpdate: (self) => { if (window.__aletheia) window.__aletheia.disperse = self.progress; }
+    });
     gsap.to('.hero-content', {
       y: -110, opacity: 0, ease: 'none',
       scrollTrigger: { trigger: '#hero', start: 'top top', end: '75% top', scrub: 0.4 }
