@@ -1,0 +1,32 @@
+THE ALETHEIA INSTITUTE — PROPRIETARY LICENSE
+(Source-Available · All Rights Reserved)
+
+Copyright (c) 2026 The Aletheia Institute. All rights reserved.
+
+This repository is published so that anyone may READ it — inspect the
+source, verify its conduct (including its zero-external-requests
+promise), and hold it to its own claims. Nothing is concealed.
+Publication is transparency, not permission.
+
+Except for the limited right to view this repository through GitHub's
+interfaces and to clone it for private, non-commercial evaluation, no
+license is granted. Without prior written permission from The Aletheia
+Institute, you may not:
+
+  - copy, reproduce, or redistribute this code, design, or content;
+  - create derivative works, including visually or structurally
+    similar websites;
+  - use any portion of it in any product, service, or website,
+    commercial or otherwise.
+
+TRADEMARKS. "The Aletheia Institute," "Veritas ex Datis," the seal and
+crest, the ΑΛΗΘΕΙΑ marks, and the named livery (including "Aletheia
+Midnight" and "Veritas Gold") are trademarks of The Aletheia Institute.
+No trademark rights are granted by this publication.
+
+THIRD-PARTY COMPONENTS. Vendored libraries (GSAP, Lenis) and self-hosted
+typefaces (Fraunces, Inter) remain under their own licenses, which govern
+those files.
+
+THE SOFTWARE AND CONTENT ARE PROVIDED "AS IS," WITHOUT WARRANTY OF ANY
+KIND. For permissions: legal@aletheiainstitute.ai

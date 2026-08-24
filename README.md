@@ -64,5 +64,6 @@ provision the certificate. Optionally commit a `CNAME` file containing
 
 ## License
 
-© The Aletheia Institute. All rights reserved. The code is public for transparency —
-nothing is concealed — but the brand, seal, and content are not licensed for reuse.
+Proprietary, source-available — see [LICENSE](LICENSE). The repository is public
+so anyone can read it and verify its conduct; reading is invited, reuse is not.
+Vendored libraries and typefaces remain under their own licenses.
