@@ -283,7 +283,7 @@
       vec3 goldDeep = vec3(0.725, 0.584, 0.286);   // Gold Deep #B99549
       vec3 teal = vec3(0.078, 0.396, 0.357);       // Verity Teal, daylight cut
       vec3 metalCol = mix(bronze, goldDeep, v_seed);
-      vec3 base = mix(midnight, metalCol, v_metal);
+      vec3 base = mix(metalCol, midnight, v_metal);   // inverted: ink engraving on a gold-lit field
       vec3 col = mix(base, teal, v_tint * u_teal);
       gl_FragColor = vec4(col, glow * v_alpha * (1.0 + v_tint * u_teal * 0.6));
     }`;
