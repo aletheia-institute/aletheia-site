@@ -88,7 +88,7 @@
     RAND[i*4+2] = Math.random();
     RAND[i*4+3] = Math.random();
     // figure over ground: artwork motes larger, field motes finer
-    const classMul = isEmblem ? (CLOUD.ascale[i] >= 1.0 ? 1.18 : 0.6) : 1.0;
+    const classMul = isEmblem ? (CLOUD.ascale[i] >= 1.0 ? 1.32 : 0.6) : 1.0;
     SIZE[i] = (isEmblem ? 0.55 + Math.random() * 0.5 : 0.45 + Math.random() * 0.7) * classMul;
     STATIC[i*9]   = SIZE[i];
     STATIC[i*9+1] = RAND[i*4];
@@ -273,7 +273,7 @@
       float embSize = (2.9 + a_size * 2.9) * u_sizeMul;
       float ambSize = (4.8 + a_size * 5.6) * 0.72;
       gl_PointSize = mix(ambSize, embSize, a_kind) * u_dpr;
-      float embA = (0.42 + 0.50 * twinkle) * u_asm * u_alphaMul;
+      float embA = (0.62 + 0.38 * twinkle) * u_asm * u_alphaMul;   // a medallion, not a watermark
       float ambA = (0.06 + 0.11 * twinkle) * u_asm;
       v_alpha = mix(ambA, embA * a_ascale, a_kind);
       v_tint = a_tint;

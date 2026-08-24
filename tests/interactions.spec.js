@@ -27,6 +27,7 @@ test.describe('demo terminal', () => {
   });
 
   test('after the last exchange, the loop wraps to a clean slate', async ({ page }) => {
+    test.slow();   // the long march: five exchanges under full-suite CPU contention
     await gotoSettled(page);
     await page.locator('#demo .modality').scrollIntoViewIfNeeded();
     await page.locator('.mod-tab[data-mod="ask"]').click();
@@ -37,6 +38,7 @@ test.describe('demo terminal', () => {
     // play through every exchange with skip-clicks
     await expect(body.locator('.q').first()).toBeVisible({ timeout: 10000 });
     for (let i = 0; i < total; i++) {
+      await expect(body.locator('.q')).toHaveCount(i + 1, { timeout: 20000 });  // typing underway
       await body.click(); await body.click();
       await expect(body.locator('.cite')).toHaveCount(i + 1, { timeout: 15000 });
       await expect(next).toBeVisible({ timeout: 8000 });

@@ -506,7 +506,6 @@
 
     function typeLine(el, text, speed, done) {
       let i = 0;
-      skipNow = false;
       const caret = document.createElement('span');
       caret.className = 'caret';
       el.appendChild(caret);
@@ -538,6 +537,7 @@
     function playExchange(n) {
       if (playing) return;
       playing = true; idx = n;
+      skipNow = false;               // reset per exchange — a click during typing always lands
       const ex = EXCHANGES[n];
       termNext.classList.remove('show');
       if (reduced) {
