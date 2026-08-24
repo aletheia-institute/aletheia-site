@@ -27,27 +27,36 @@
   /* ---------- Capability budget (review: no unbounded desktop tier) ---------- */
   const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 760;
   const lowTier = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
-  const BUDGET = isMobile ? 4200 : (lowTier ? 9000 : 26000);
+  const BUDGET = isMobile ? 4600 : (lowTier ? 9500 : 28000);
 
-  /* ---------- The seal cloud (shipped, packed Int16) ---------- */
+  /* ---------- The seal cloud (shipped, packed Int16, two classes) ----------
+     gold-artwork points come first, then the navy field; each mote knows
+     which it is, and wears the livery accordingly. */
   function sealCloud() {
     const cloud = window.__ALETHEIA_EMBLEM;
+    const goldCount = window.__ALETHEIA_EMBLEM_GOLD || 0;
     if (cloud && cloud.length >= 4 && cloud.length % 2 === 0) {
       const total = cloud.length / 2;
       const step = Math.max(1, Math.ceil(total / BUDGET));
-      const pts = [];
-      for (let i = 0; i + 1 < cloud.length; i += 2 * step) pts.push(cloud[i], cloud[i + 1]);
-      return pts;
+      const pts = [], metal = [];
+      for (let i = 0; i + 1 < cloud.length; i += 2 * step) {
+        pts.push(cloud[i], cloud[i + 1]);
+        metal.push((i / 2) < goldCount ? 1 : 0);
+      }
+      return { pts, metal };
     }
-    const pts = [];                                   // last-resort ring
+    const pts = [], metal = [];                       // last-resort ring
     for (let i = 0; i < 900; i++) {
       const a = (i / 900) * Math.PI * 2;
       pts.push(Math.cos(a) * 0.94, Math.sin(a) * 0.94);
+      metal.push(1);
     }
-    return pts;
+    return { pts, metal };
   }
 
-  const SEAL = sealCloud();
+  const CLOUD = sealCloud();
+  const SEAL = CLOUD.pts;
+  const METAL = CLOUD.metal;
   const EMB = SEAL.length / 2;
   // measured bounds — the fit math derives from data, never from a literal
   let sxMin = 1e9, sxMax = -1e9, syMin = 1e9, syMax = -1e9;
@@ -65,7 +74,7 @@
   const T = new Float32Array(COUNT * 2);
   const RAND = new Float32Array(COUNT * 4);           // phase, speed, cloudX, cloudY
   const SIZE = new Float32Array(COUNT);               // base size variance (static)
-  const STATIC = new Float32Array(COUNT * 5);         // size, phase, speed, kind, tint
+  const STATIC = new Float32Array(COUNT * 6);         // size, phase, speed, kind, tint, metal
 
   let W = 0, H = 0, DPR = 1;
 
@@ -76,11 +85,12 @@
     RAND[i*4+2] = Math.random();
     RAND[i*4+3] = Math.random();
     SIZE[i] = isEmblem ? 0.55 + Math.random() * 0.5 : 0.45 + Math.random() * 0.7;
-    STATIC[i*5]   = SIZE[i];
-    STATIC[i*5+1] = RAND[i*4];
-    STATIC[i*5+2] = RAND[i*4+1];
-    STATIC[i*5+3] = isEmblem ? 1 : 0;
-    STATIC[i*5+4] = Math.random() < 0.04 ? 1 : 0;     // teal seeds await the word
+    STATIC[i*6]   = SIZE[i];
+    STATIC[i*6+1] = RAND[i*4];
+    STATIC[i*6+2] = RAND[i*4+1];
+    STATIC[i*6+3] = isEmblem ? 1 : 0;
+    STATIC[i*6+4] = Math.random() < 0.04 ? 1 : 0;     // teal seeds await the word
+    STATIC[i*6+5] = isEmblem ? METAL[i] : (Math.random() < 0.5 ? 1 : 0);
   }
 
   /* ---------- Scene target generators (viewport px) ---------- */
@@ -230,6 +240,7 @@
     attribute float a_speed;
     attribute float a_kind;      // 1 emblem, 0 ambient dust
     attribute float a_tint;
+    attribute float a_metal;     // 1 gold artwork, 0 the navy field
     uniform vec2 u_res;
     uniform float u_dpr;
     uniform float u_time;
@@ -239,6 +250,7 @@
     varying float v_alpha;
     varying float v_tint;
     varying float v_seed;
+    varying float v_metal;
     void main() {
       vec2 clip = (a_pos / u_res) * 2.0 - 1.0;
       gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
@@ -248,25 +260,30 @@
       gl_PointSize = mix(ambSize, embSize, a_kind) * u_dpr;
       float embA = (0.42 + 0.50 * twinkle) * u_asm * u_alphaMul;
       float ambA = (0.06 + 0.11 * twinkle) * u_asm;
-      v_alpha = mix(ambA, embA, a_kind);
+      // the navy field sits a register quieter than the artwork upon it
+      v_alpha = mix(ambA, embA * mix(0.62, 1.0, a_metal), a_kind);
       v_tint = a_tint;
       v_seed = fract(a_size * 13.7);
+      v_metal = a_metal;
     }`;
   const fsrc = `
     precision mediump float;
     varying float v_alpha;
     varying float v_tint;
     varying float v_seed;
+    varying float v_metal;
     uniform float u_teal;
     void main() {
       vec2 d = gl_PointCoord - 0.5;
       float r = length(d);
       float glow = smoothstep(0.5, 0.0, r);
       glow *= glow;
-      vec3 ink = vec3(0.043, 0.122, 0.200);
-      vec3 bronze = vec3(0.478, 0.369, 0.165);
-      vec3 teal = vec3(0.078, 0.396, 0.357);
-      vec3 base = mix(ink, bronze, step(0.55, v_seed));
+      vec3 midnight = vec3(0.043, 0.122, 0.200);   // Aletheia Midnight #0B1F33
+      vec3 bronze = vec3(0.478, 0.369, 0.165);     // Ledger Bronze #7A5E2A
+      vec3 goldDeep = vec3(0.725, 0.584, 0.286);   // Gold Deep #B99549
+      vec3 teal = vec3(0.078, 0.396, 0.357);       // Verity Teal, daylight cut
+      vec3 metalCol = mix(bronze, goldDeep, v_seed);
+      vec3 base = mix(midnight, metalCol, v_metal);
       vec3 col = mix(base, teal, v_tint * u_teal);
       gl_FragColor = vec4(col, glow * v_alpha * (1.0 + v_tint * u_teal * 0.6));
     }`;
@@ -287,7 +304,10 @@
       gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fsrc));
       gl.linkProgram(prog);
       if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error('link');
-    } catch (e) { canvas.remove(); return false; }
+    } catch (e) {
+      console.error('constellation shader failed:', e && e.message);   // loud — the suite hears this
+      canvas.remove(); return false;
+    }
     gl.useProgram(prog);
     uRes = gl.getUniformLocation(prog, 'u_res');
     uDpr = gl.getUniformLocation(prog, 'u_dpr');
@@ -304,10 +324,10 @@
     const bind1 = (name, offset) => {
       const loc = gl.getAttribLocation(prog, name);
       gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, 1, gl.FLOAT, false, 20, offset);
+      gl.vertexAttribPointer(loc, 1, gl.FLOAT, false, 24, offset);
     };
     bind1('a_size', 0); bind1('a_phase', 4); bind1('a_speed', 8);
-    bind1('a_kind', 12); bind1('a_tint', 16);
+    bind1('a_kind', 12); bind1('a_tint', 16); bind1('a_metal', 20);
 
     // dynamic position buffer: the only per-frame upload (8 bytes/particle)
     dynVbo = gl.createBuffer();
