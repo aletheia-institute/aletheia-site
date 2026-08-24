@@ -52,7 +52,7 @@ test('mobile menu toggle carries correct ARIA state', async ({ page, isMobile })
 
 test('decorative layers are hidden from AT', async ({ page }) => {
   await gotoSettled(page);
-  for (const sel of ['#constellation', '.atmosphere', '.grain', '#progress', '#cursor', '.scroll-hint']) {
+  for (const sel of ['#constellation', '.atmosphere', '.grain', '#progress', '#cursor']) {
     await expect(page.locator(sel).first()).toHaveAttribute('aria-hidden', 'true');
   }
 });

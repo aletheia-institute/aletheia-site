@@ -167,16 +167,128 @@
     });
   }
 
-  /* ---------- Hero: dispersal of the constellation on scroll ---------- */
+  /* ---------- Hero content recedes; the narrator carries on ---------- */
   if (!reduced) {
-    ScrollTrigger.create({
-      trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.5,
-      onUpdate: (self) => { if (window.__aletheia) window.__aletheia.disperse = self.progress; }
-    });
     gsap.to('.hero-content', {
       y: -110, opacity: 0, ease: 'none',
       scrollTrigger: { trigger: '#hero', start: 'top top', end: '75% top', scrub: 0.4 }
     });
+  }
+
+  /* ---------- The descent glyph: Λ inverted, and it acts ---------- */
+  {
+    const d = document.getElementById('descend');
+    if (d) d.addEventListener('click', () => {
+      const el = document.getElementById('manifesto');
+      if (lenis) { lenis.start(); lenis.scrollTo(el, { offset: -20, duration: 1.6 }); }
+      else el.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  /* ---------- The modality stage: it listens, reads, watches, answers ---------- */
+  {
+    const tabs = document.querySelectorAll('.mod-tab');
+    const panels = { listen: null, read: null, watch: null, ask: null };
+    Object.keys(panels).forEach(k => panels[k] = document.getElementById('mod-' + k));
+    let active = 'listen';
+    let timers = [];
+    const clearTimers = () => { timers.forEach(t => clearTimeout(t)); timers = []; };
+    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+
+    // LISTEN: waveform speaks, dictation types, the note assembles
+    const wave = document.getElementById('wave');
+    if (wave) for (let i = 0; i < 30; i++) {
+      const bar = document.createElement('i');
+      bar.style.setProperty('--amp', (25 + Math.random() * 70) + '%');
+      bar.style.animationDelay = (Math.random() * -1.1) + 's';
+      wave.appendChild(bar);
+    }
+    const DICTATION = '"…patient reports intermittent epigastric pain for about three weeks, worse after meals, no weight loss, denies melena…"';
+    function playListen() {
+      const live = document.getElementById('dict-live');
+      const fields = panels.listen.querySelectorAll('.note-field');
+      if (!live) return;
+      live.textContent = '';
+      fields.forEach(f => f.classList.remove('on'));
+      if (reduced) {
+        live.textContent = DICTATION;
+        fields.forEach(f => f.classList.add('on'));
+        return;
+      }
+      let i = 0;
+      (function tick() {
+        if (active !== 'listen') return;
+        if (i < DICTATION.length) {
+          live.textContent += DICTATION[i++];
+          later(tick, 34 + Math.random() * 30);
+        } else {
+          fields.forEach((f, k) => later(() => f.classList.add('on'), 350 + k * 520));
+          later(playListen, 9000);
+        }
+      })();
+    }
+
+    // READ: the beam passes, fields lift out with their confidence
+    function playRead() {
+      const chips = panels.read.querySelectorAll('.chip');
+      chips.forEach(c => c.classList.remove('on'));
+      if (reduced) { chips.forEach(c => c.classList.add('on')); return; }
+      chips.forEach((c, k) => later(() => {
+        if (active !== 'read') return;
+        c.classList.add('on');
+      }, 900 + k * 620));
+      later(() => { if (active === 'read') playRead(); }, 900 + chips.length * 620 + 4200);
+    }
+
+    // WATCH: the timecode runs, findings land on the record
+    function playWatch() {
+      const tc = document.getElementById('vid-tc');
+      const prog = document.getElementById('vid-prog');
+      const findings = panels.watch.querySelectorAll('.finding');
+      findings.forEach(f => f.classList.remove('on'));
+      if (reduced) {
+        findings.forEach(f => f.classList.add('on'));
+        if (tc) tc.textContent = '14:32'; if (prog) prog.style.width = '100%';
+        return;
+      }
+      const DUR = 12000, TOTAL = 14 * 60 + 32;
+      const marks = [[2*60+14, 0], [6*60+47, 1], [11*60+3, 2], [14*60+29, 3]];
+      const t0 = performance.now();
+      (function tick() {
+        if (active !== 'watch') return;
+        const p = Math.min(1, (performance.now() - t0) / DUR);
+        const sec = Math.floor(p * TOTAL);
+        if (tc) tc.textContent = String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0');
+        if (prog) prog.style.width = (p * 100) + '%';
+        marks.forEach(([at, idx]) => { if (sec >= at) findings[idx] && findings[idx].classList.add('on'); });
+        if (p < 1) timers.push(setTimeout(tick, 90));
+        else later(playWatch, 5000);
+      })();
+    }
+
+    const PLAY = { listen: playListen, read: playRead, watch: playWatch, ask: () => {} };
+
+    function select(k) {
+      if (!panels[k]) return;
+      active = k;
+      clearTimers();
+      tabs.forEach(t => {
+        const on = t.dataset.mod === k;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+      Object.entries(panels).forEach(([key, p]) => { if (p) p.hidden = key !== k; });
+      PLAY[k]();
+      if (k === 'ask' && window.__aletheiaStartTerminal) window.__aletheiaStartTerminal();
+    }
+    tabs.forEach(t => t.addEventListener('click', () => select(t.dataset.mod)));
+
+    // start/stop with visibility — no theater for an empty house
+    const stage = document.querySelector('.modality');
+    if (stage) new IntersectionObserver((en) => {
+      if (en[0].isIntersecting) select(active);
+      else clearTimers();
+    }, { threshold: 0.25 }).observe(stage);
   }
 
   /* ---------- Manifesto: words ignite as the light passes ---------- */
@@ -452,12 +564,15 @@
       });
     }
 
+    const startTerminal = () => {
+      if (played) return;
+      played = true;
+      setTimeout(() => playExchange(0), 400);
+    };
     new IntersectionObserver((entries, obs) => {
-      if (entries[0].isIntersecting && !played) {
-        played = true; obs.disconnect();
-        setTimeout(() => playExchange(0), 500);
-      }
-    }, { threshold: 0.4 }).observe(termBody);
+      if (entries[0].isIntersecting && !played) { obs.disconnect(); startTerminal(); }
+    }, { threshold: 0.05 }).observe(termBody);
+    window.__aletheiaStartTerminal = startTerminal;   // the ASK tab starts the show directly
 
     termNext.addEventListener('click', () => {
       if (playing) return;

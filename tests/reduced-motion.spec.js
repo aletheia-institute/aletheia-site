@@ -34,6 +34,7 @@ test('manifesto is fully legible without scrolling theatrics', async ({ page }) 
 test('terminal renders exchanges instantly', async ({ page }) => {
   await page.goto('/');
   await page.waitForFunction(() => document.body.classList.contains('ready'), null, { timeout: 8000 });
-  await page.locator('#demo .terminal').scrollIntoViewIfNeeded();
+  await page.locator('#demo .modality').scrollIntoViewIfNeeded();
+  await page.locator('.mod-tab[data-mod="ask"]').click();
   await expect(page.locator('#term-body .cite').first()).toContainText('your scheduling DB', { timeout: 6000 });
 });

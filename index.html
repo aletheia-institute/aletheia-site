@@ -86,11 +86,12 @@
   </div>
 </div>
 
+<canvas id="constellation" aria-hidden="true"></canvas>
+
 <main id="main">
 
 <!-- HERO -->
 <header id="hero">
-  <canvas id="constellation" aria-hidden="true"></canvas>
   <svg class="hero-seal-static" viewBox="0 0 200 200" aria-hidden="true">
     <circle cx="100" cy="100" r="92" stroke-width="1.4"/>
     <circle cx="100" cy="100" r="80" stroke-width="2.2"/>
@@ -99,7 +100,7 @@
     <path d="M 100,112 C 88,106 74,106 64,110 L 64,132 C 74,128 88,128 100,134 Z" stroke-width="1.6"/>
     <path d="M 100,112 C 112,106 126,106 136,110 L 136,132 C 126,128 112,128 100,134 Z" stroke-width="1.6"/>
   </svg>
-  <div class="hero-content">
+  <div class="hero-content halo">
     <div class="hero-kicker" data-hero-fade>THE ALETHEIA INSTITUTE</div>
     <h1 class="hero-title">
       <span class="line"><span>Talk to</span></span>
@@ -112,7 +113,12 @@
       <a class="btn btn-ghost" data-magnetic href="#demo">See It Speak</a>
     </div>
   </div>
-  <div class="scroll-hint" data-hero-fade aria-hidden="true"><span>UNCONCEAL</span><span class="stem"></span></div>
+  <button class="descend" id="descend" data-hero-fade aria-label="Begin — scroll to the story">
+    <svg viewBox="0 0 44 30" aria-hidden="true">
+      <path d="M 4 4 L 22 26 L 40 4" fill="none" stroke="currentColor" stroke-width="2.6"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
 </header>
 
 <!-- MANIFESTO — the unconcealment -->
@@ -195,10 +201,72 @@
     <span class="s-ring" data-strata="0.35" style="width:30vw;height:30vw;right:-8vw;bottom:4%"></span>
   </div>
   <div class="wrap">
-    <div class="kicker fade-up">Demonstration</div>
-    <h2 class="sec fade-up">Ask. It answers.<br>From <span class="foil">your</span> evidence.</h2>
-    <p class="lead fade-up">A glimpse of the experience — an assistant grounded solely in an organization's own records, citing its sources. Click the terminal to skip the typing.</p>
-    <div class="terminal fade-up">
+    <div class="kicker fade-up">One Intelligence</div>
+    <h2 class="sec fade-up">It listens. It reads.<br>It watches. It <span class="foil">answers</span>.</h2>
+    <p class="lead fade-up">Every modality, trained on your practice — dictation becomes a structured note, a scanned page becomes data, footage becomes findings, and questions are answered from your own evidence. Everything below is simulated on this page; nothing leaves it.</p>
+
+    <div class="modality fade-up">
+      <div class="mod-tabs" id="mod-tabs" role="tablist" aria-label="Capabilities">
+        <button class="mod-tab active" data-mod="listen" role="tab" aria-selected="true" aria-controls="mod-listen">LISTEN<span>dictation → note</span></button>
+        <button class="mod-tab" data-mod="read" role="tab" aria-selected="false" aria-controls="mod-read">READ<span>scan → data</span></button>
+        <button class="mod-tab" data-mod="watch" role="tab" aria-selected="false" aria-controls="mod-watch">WATCH<span>footage → findings</span></button>
+        <button class="mod-tab" data-mod="ask" role="tab" aria-selected="false" aria-controls="mod-ask">ASK<span>question → evidence</span></button>
+      </div>
+
+      <div class="mod-stage">
+        <div class="mod-panel" id="mod-listen" role="tabpanel" aria-label="Listen demonstration">
+          <div class="mod-card">
+            <div class="mod-head"><span class="mod-live">● RECORDING</span><span class="mod-title">Exam room 3 — dictation</span></div>
+            <div class="wave" id="wave" aria-hidden="true"></div>
+            <p class="dict" aria-hidden="true"><span id="dict-live"></span><span class="dcaret"></span></p>
+            <div class="note" id="note">
+              <div class="note-field" data-k="CHIEF COMPLAINT" data-v="Intermittent epigastric pain, 3 weeks"></div>
+              <div class="note-field" data-k="HISTORY" data-v="Worse after meals; no weight loss; denies melena"></div>
+              <div class="note-field" data-k="ASSESSMENT" data-v="Suspected gastritis vs. early ulcer disease"></div>
+              <div class="note-field" data-k="PLAN" data-v="H. pylori test · PPI trial 4 wks · return sooner if red flags"></div>
+            </div>
+            <p class="mod-cite">[the note assembles itself — coded, structured, chart-ready]</p>
+          </div>
+        </div>
+
+        <div class="mod-panel" id="mod-read" role="tabpanel" aria-label="Read demonstration" hidden>
+          <div class="mod-card">
+            <div class="mod-head"><span class="mod-live">◈ SCANNING</span><span class="mod-title">Faxed referral — 3 pages</span></div>
+            <div class="docfac" aria-hidden="true">
+              <div class="doc-line w80"></div><div class="doc-line w60"></div><div class="doc-line w90"></div>
+              <div class="doc-line w50"></div><div class="doc-line w75"></div><div class="doc-line w65"></div>
+              <div class="scanbeam"></div>
+            </div>
+            <div class="chips" id="chips">
+              <div class="chip" data-k="PATIENT" data-v="Rivera, M." data-c="99"></div>
+              <div class="chip" data-k="DOB" data-v="04 / 1962" data-c="99"></div>
+              <div class="chip" data-k="REFERRING" data-v="Dr. Osei — Internal Med" data-c="97"></div>
+              <div class="chip" data-k="REASON" data-v="Iron-deficiency anemia, r/o GI source" data-c="95"></div>
+              <div class="chip" data-k="MEDS" data-v="Lisinopril · ASA 81mg" data-c="93"></div>
+            </div>
+            <p class="mod-cite">[every field lifted with a confidence score — low confidence goes to a human]</p>
+          </div>
+        </div>
+
+        <div class="mod-panel" id="mod-watch" role="tabpanel" aria-label="Watch demonstration" hidden>
+          <div class="mod-card">
+            <div class="mod-head"><span class="mod-live">▶ ANALYZING</span><span class="mod-title">Procedure recording — 14:32 min</span></div>
+            <div class="vid" aria-hidden="true">
+              <div class="vid-frame"><span class="vid-tc" id="vid-tc">00:00</span></div>
+              <div class="vid-track"><div class="vid-prog" id="vid-prog"></div></div>
+            </div>
+            <div class="findings" id="findings">
+              <div class="finding" data-t="02:14" data-v="Landmark reached — documented automatically"></div>
+              <div class="finding" data-t="06:47" data-v="Region of interest flagged for review"></div>
+              <div class="finding" data-t="11:03" data-v="Retrieval confirmed · specimen logged"></div>
+              <div class="finding" data-t="14:29" data-v="Withdrawal time within guideline"></div>
+            </div>
+            <p class="mod-cite">[footage becomes a timestamped record — searchable, auditable, yours]</p>
+          </div>
+        </div>
+
+        <div class="mod-panel" id="mod-ask" role="tabpanel" aria-label="Ask demonstration" hidden>
+    <div class="terminal">
       <div class="term-bar">
         <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
         <span class="title">aletheia — private-assistant — on-premises</span>
@@ -207,6 +275,9 @@
       <div class="term-body" id="term-body" aria-hidden="true"></div>
       <div class="sr-only" id="term-live" aria-live="polite"></div>
       <button class="term-next" id="term-next" type="button">ASK ANOTHER ▸</button>
+    </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -142,12 +142,30 @@ test.describe('static: the promise', () => {
     expect(read('js/inquiry.js')).toContain('inquiry@aletheiainstitute.ai');
   });
 
-  test('the full seal ships as a point cloud for the constellation', () => {
+  test('the full seal ships as a packed point cloud — structural, not token-counted', () => {
     const data = read('js/emblem-data.js');
     expect(data).toContain('window.__ALETHEIA_EMBLEM');
-    const nums = data.match(/-?\d+\.?\d*/g) || [];
-    expect(nums.length).toBeGreaterThan(24000);  // ≥12k points — full-fidelity crest, no half-measures
+    const m = data.match(/atob\("([A-Za-z0-9+/=]+)"\)/);
+    expect(m, 'packed base64 payload missing').toBeTruthy();
+    const bytes = Buffer.from(m[1], 'base64');
+    expect(bytes.length % 4).toBe(0);                       // int16 (x,y) pairs
+    const points = bytes.length / 4;
+    expect(points).toBeGreaterThanOrEqual(20000);           // full-fidelity floor
+    const i16 = new Int16Array(bytes.buffer, bytes.byteOffset, bytes.length / 2);
+    for (let i = 0; i < i16.length; i += 997) {             // spot-check normalization
+      expect(Math.abs(i16[i])).toBeLessThanOrEqual(1000);
+    }
+    expect(data.length, 'emblem payload budget (200KB)').toBeLessThan(200 * 1024);
     expect(read('index.html')).toContain('js/emblem-data.js');
+    expect(existsSync(join(root, 'scripts/generate-emblem.sh'))).toBe(true);  // reproducible
+  });
+
+  test('the modality stage ships all four capabilities and the descent glyph', () => {
+    const html = read('index.html');
+    for (const id of ['mod-tabs', 'mod-listen', 'mod-read', 'mod-watch', 'mod-ask', 'descend']) {
+      expect(html, `missing #${id}`).toContain(`id="${id}"`);
+    }
+    expect(html).toContain('role="tablist"');
   });
 
   test('demonstration: at least 4 exchanges, none of them GI-specific', () => {

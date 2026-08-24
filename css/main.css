@@ -232,7 +232,7 @@ nav.scrolled{background:rgba(7,10,15,.74);backdrop-filter:blur(14px);border-colo
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:90px 24px 60px;overflow:hidden;
 }
-#constellation{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#constellation{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .hero-seal-static{display:none}
 .hero-content{position:relative;z-index:2;pointer-events:none}
 .hero-content a{pointer-events:auto}
@@ -273,19 +273,25 @@ nav.scrolled{background:rgba(7,10,15,.74);backdrop-filter:blur(14px);border-colo
 }
 .hero-motto em{font-style:italic;letter-spacing:1px;color:var(--dim);margin-left:12px;text-transform:none}
 .hero-cta{margin-top:44px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
-.scroll-hint{
-  font-family:var(--serif);
-  position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-  color:var(--dim);font-size:10.5px;letter-spacing:3.5px;
+/* The descent glyph: Λ inverted — an A without its bar, pointing the way down */
+.descend{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;
+  width:64px;height:46px;background:none;border:0;cursor:pointer;
+  color:var(--accent);padding:8px;
 }
-.scroll-hint .stem{width:1px;height:52px;overflow:hidden;position:relative}
-.scroll-hint .stem::after{
-  content:"";position:absolute;left:0;top:0;width:1px;height:100%;
-  background:linear-gradient(180deg,transparent,var(--gold));
-  animation:fall 2.2s var(--ease-out) infinite;
+.descend svg{width:100%;height:100%;overflow:visible}
+.descend path{
+  stroke-dasharray:60;stroke-dashoffset:60;
+  animation:descend-draw 2.6s var(--ease-out) infinite;
 }
-@keyframes fall{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+.descend:hover{color:var(--accent-hi)}
+@keyframes descend-draw{
+  0%{stroke-dashoffset:60;opacity:0}
+  18%{opacity:1}
+  55%{stroke-dashoffset:0;opacity:1}
+  80%{stroke-dashoffset:0;opacity:0;transform:translateY(6px)}
+  100%{stroke-dashoffset:0;opacity:0;transform:translateY(6px)}
+}
 
 /* ---------- Buttons ---------- */
 .btn{
@@ -849,3 +855,145 @@ footer .made .whisper-em{color:var(--accent)}
 /* The reveal mask exists only for the entrance — once the title has risen,
    the mask releases and no box can ever clip a descender again. */
 body.revealed .hero-title .line{overflow:visible}
+
+/* ---------- Hero halo: the text floats on vellum light, above the motes ---------- */
+.hero-content.halo{
+  background:radial-gradient(58% 62% at 50% 46%, rgba(247,243,234,.85), rgba(247,243,234,.45) 62%, transparent 78%);
+  padding:44px 56px;border-radius:32px;
+}
+
+/* ============================================================
+   THE MODALITY STAGE — one intelligence, every sense
+   Clinic-side panels are paper; the machine room stays ink.
+   ============================================================ */
+.modality{margin-top:56px;max-width:900px}
+.mod-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.mod-tab{
+  flex:1;min-width:150px;cursor:pointer;text-align:left;
+  background:rgba(255,254,250,.66);border:1px solid rgba(11,31,51,.12);border-radius:8px;
+  padding:13px 18px;font-family:var(--serif);font-weight:600;font-size:14px;
+  letter-spacing:2.5px;color:var(--fg);
+  transition:border-color .3s,background .3s,transform .2s;
+}
+.mod-tab span{
+  display:block;font-family:var(--sans);font-weight:400;font-size:11px;
+  letter-spacing:.4px;color:var(--dim);margin-top:3px;text-transform:none;
+}
+.mod-tab:hover{border-color:var(--accent)}
+.mod-tab.active{
+  background:#FFFEFA;border-color:var(--gold-deep);
+  box-shadow:0 14px 40px -18px rgba(11,31,51,.3);transform:translateY(-2px);
+}
+.mod-tab.active span{color:var(--accent)}
+
+.mod-panel[hidden]{display:none}
+.mod-card{
+  background:linear-gradient(165deg,#FFFEFA,#F4EFE3);
+  border:1px solid rgba(11,31,51,.10);border-radius:12px;
+  box-shadow:0 30px 80px -36px rgba(11,31,51,.3);
+  padding:28px 30px;min-height:360px;
+}
+#mod-ask .terminal{margin-top:0;max-width:none}
+.mod-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px}
+.mod-live{
+  font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:2px;
+  color:var(--teal-deep);
+}
+.mod-title{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--dim)}
+.mod-cite{
+  margin-top:18px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;
+  color:var(--teal-deep);
+}
+
+/* LISTEN: the waveform speaks, the note assembles */
+.wave{display:flex;align-items:center;gap:3px;height:44px;margin-bottom:14px}
+.wave i{
+  flex:1;background:linear-gradient(180deg,var(--gold-deep),var(--ledger-bronze));
+  border-radius:2px;height:14%;
+  animation:wavebob 1.1s ease-in-out infinite alternate;
+}
+@keyframes wavebob{from{height:12%}to{height:var(--amp,70%)}}
+.dict{
+  font-family:var(--serif);font-style:italic;font-size:15px;color:var(--fg);
+  min-height:46px;margin-bottom:16px;
+}
+.dcaret{display:inline-block;width:7px;height:14px;background:var(--gold-deep);vertical-align:baseline;animation:blink 1s steps(1) infinite}
+.note{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:700px){.note{grid-template-columns:1fr}}
+.note-field{
+  border:1px solid rgba(11,31,51,.1);border-left:3px solid var(--gold-deep);
+  border-radius:5px;padding:10px 14px;background:rgba(255,254,250,.8);
+  opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s;
+}
+.note-field.on{opacity:1;transform:none}
+.note-field::before{
+  content:attr(data-k);display:block;
+  font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:1.6px;color:var(--accent);
+}
+.note-field::after{content:attr(data-v);font-size:13px;color:var(--fg)}
+
+/* READ: the beam passes, the fields lift out */
+.docfac{
+  position:relative;overflow:hidden;border:1px solid rgba(11,31,51,.12);border-radius:6px;
+  background:repeating-linear-gradient(0deg,#FDFBF6 0 8px,#F8F4EA 8px 9px);
+  padding:18px 20px;margin-bottom:16px;
+}
+.doc-line{height:7px;border-radius:3px;background:rgba(11,31,51,.14);margin:8px 0}
+.doc-line.w80{width:80%}.doc-line.w60{width:60%}.doc-line.w90{width:90%}
+.doc-line.w50{width:50%}.doc-line.w75{width:75%}.doc-line.w65{width:65%}
+.scanbeam{
+  position:absolute;left:0;right:0;top:-20%;height:26px;
+  background:linear-gradient(180deg,transparent,rgba(20,101,91,.25),transparent);
+  animation:scanpass 3.2s ease-in-out infinite;
+}
+@keyframes scanpass{0%{top:-14%}55%{top:105%}100%{top:105%}}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  border:1px solid rgba(122,94,42,.4);border-radius:20px;padding:8px 16px;
+  background:rgba(255,254,250,.9);font-size:12.5px;color:var(--fg);
+  opacity:0;transform:scale(.8);transition:opacity .4s,transform .4s;
+}
+.chip.on{opacity:1;transform:none}
+.chip::before{
+  content:attr(data-k) "  ";
+  font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:1.4px;color:var(--accent);
+}
+.chip::after{
+  content:"  " attr(data-c) "%";
+  font-family:ui-monospace,Menlo,monospace;font-size:10px;color:var(--teal-deep);
+}
+.chip i{font-style:normal}
+
+/* WATCH: footage becomes findings */
+.vid{margin-bottom:16px}
+.vid-frame{
+  position:relative;height:120px;border-radius:6px;
+  background:
+    radial-gradient(40% 55% at 62% 46%, rgba(20,101,91,.18), transparent 70%),
+    linear-gradient(150deg,#122A40,#0A0E14);
+  display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;
+}
+.vid-tc{
+  font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--institute-ivory);
+  background:rgba(10,14,20,.6);padding:2px 8px;border-radius:3px;
+}
+.vid-track{height:4px;border-radius:2px;background:rgba(11,31,51,.12);margin-top:8px}
+.vid-prog{height:100%;width:0%;border-radius:2px;background:linear-gradient(90deg,var(--gold-deep),var(--teal-deep))}
+.findings{display:grid;gap:8px}
+.finding{
+  display:flex;gap:14px;align-items:baseline;
+  border-bottom:1px solid rgba(11,31,51,.08);padding:7px 2px;
+  opacity:0;transform:translateX(-12px);transition:opacity .45s,transform .45s;
+}
+.finding.on{opacity:1;transform:none}
+.finding::before{
+  content:attr(data-t);font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;color:var(--teal-deep);flex:none;
+}
+.finding::after{content:attr(data-v);font-size:13px;color:var(--fg)}
+
+@media (prefers-reduced-motion:reduce){
+  .descend path{animation:none;stroke-dashoffset:0}
+  .wave i,.scanbeam{animation:none}
+  .note-field,.chip,.finding{opacity:1;transform:none;transition:none}
+}

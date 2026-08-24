@@ -5,7 +5,8 @@ import { gotoSettled } from './helpers.js';
 test.describe('demo terminal', () => {
   test('types, skips on click, advances, and loops back to the start', async ({ page }) => {
     await gotoSettled(page);
-    await page.locator('#demo .terminal').scrollIntoViewIfNeeded();
+    await page.locator('#demo .modality').scrollIntoViewIfNeeded();
+    await page.locator('.mod-tab[data-mod="ask"]').click();
     // typing begins — patient-generic, no specialty jargon
     await expect(page.locator('#term-body .q').first()).toContainText('patients are overdue', { timeout: 10000 });
     // click-to-skip completes the exchange fast
@@ -27,7 +28,8 @@ test.describe('demo terminal', () => {
 
   test('after the last exchange, the loop wraps to a clean slate', async ({ page }) => {
     await gotoSettled(page);
-    await page.locator('#demo .terminal').scrollIntoViewIfNeeded();
+    await page.locator('#demo .modality').scrollIntoViewIfNeeded();
+    await page.locator('.mod-tab[data-mod="ask"]').click();
     const next = page.locator('#term-next');
     const body = page.locator('#term-body');
     // total exchanges known to the page
@@ -163,6 +165,28 @@ test.describe('mobile navigation', () => {
     await page.locator('#mobile-menu a[href="#contact"]').click();
     await expect(page.locator('#mobile-menu')).not.toBeVisible();
     await expect(page.locator('#contact')).toBeInViewport();
+  });
+});
+
+test.describe('the modality stage', () => {
+  test('four capabilities; tabs switch panels; the note assembles itself', async ({ page }) => {
+    await gotoSettled(page);
+    await page.locator('#demo .modality').scrollIntoViewIfNeeded();
+    await expect(page.locator('.mod-tab')).toHaveCount(4);
+    // LISTEN is the doctor-first default: dictation types, the note fills
+    await expect(page.locator('.mod-tab[data-mod="listen"]')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('#dict-live')).toContainText('epigastric', { timeout: 15000 });
+    await expect(page.locator('#mod-listen .note-field').first()).toHaveClass(/on/, { timeout: 20000 });
+    // READ: fields lift out of the scan with confidence scores
+    await page.locator('.mod-tab[data-mod="read"]').click();
+    await expect(page.locator('#mod-read')).toBeVisible();
+    await expect(page.locator('#mod-read .chip').first()).toHaveClass(/on/, { timeout: 10000 });
+    // WATCH: the timecode runs
+    await page.locator('.mod-tab[data-mod="watch"]').click();
+    await expect(page.locator('#vid-tc')).not.toHaveText('00:00', { timeout: 8000 });
+    // ASK: the console remains, one tab among equals
+    await page.locator('.mod-tab[data-mod="ask"]').click();
+    await expect(page.locator('#mod-ask .terminal')).toBeVisible();
   });
 });
 
