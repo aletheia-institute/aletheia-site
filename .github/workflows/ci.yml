@@ -2,7 +2,9 @@ name: CI & Deploy
 
 on:
   push:
-    branches: [main]
+    # 'chore/**' matters: PRs opened by a workflow using GITHUB_TOKEN do not
+    # trigger CI, so the vendor-update branch would otherwise sit untested.
+    branches: [main, 'chore/**']
   pull_request:
 
 concurrency:

@@ -1,6 +1,7 @@
 // Static guarantees: files on disk keep their promises before a browser ever runs.
 import { test, expect } from '@playwright/test';
 import { readFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -107,12 +108,22 @@ test.describe('static: the promise', () => {
     }
   });
 
-  test('vendored libraries match the pinned versions in vendor.json', () => {
+  test('vendored libraries match the pinned versions, by content hash', () => {
+    // Minified builds do not reliably embed their version string (Lenis dropped
+    // its constant at 1.3), so integrity is verified against vendor.lock.json,
+    // which scripts/vendor.mjs writes at download time.
     const manifest = JSON.parse(read('vendor.json'));
-    const gsap = read('js/gsap.min.js');
-    expect(gsap).toContain(`GSAP ${manifest.libraries.gsap.version}`);
-    const lenis = read('js/lenis.min.js');
-    expect(lenis).toContain(`"${manifest.libraries.lenis.version}"`);
+    const lock = JSON.parse(read('vendor.lock.json'));
+    for (const [name, lib] of Object.entries(manifest.libraries)) {
+      expect(lock.libraries[name], `${name}: vendor.json bumped without re-vendoring`)
+        .toBe(lib.version);
+    }
+    for (const [file, sha] of Object.entries(lock.files)) {
+      const actual = createHash('sha256').update(readFileSync(join(root, file))).digest('hex');
+      expect(actual, `${file} does not match its locked hash — re-run npm run vendor`).toBe(sha);
+    }
+    // GSAP still publishes a version banner; assert it while it exists.
+    expect(read('js/gsap.min.js')).toContain(`GSAP ${manifest.libraries.gsap.version}`);
   });
 
   test('the collaboration stays on the record', () => {
